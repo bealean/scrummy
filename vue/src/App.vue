@@ -1,57 +1,60 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link class="link" v-bind:to="{ name: 'home' }">Home</router-link>
-      <span v-if="$store.state.token != ''">
-        &nbsp;|&nbsp;
-        <router-link class="link" v-bind:to="{ name: 'logout' }"
-          >Logout</router-link
-        >
-      </span>
-      &nbsp;|&nbsp;
-      <router-link class="link" v-bind:to="{ name: 'searchRecipes' }"
-        >Search Recipes</router-link
-      >
+    <loading-overlay v-if="$store.state.isLoading" />
+    <div id="loaded-div">
+      <top-navigation />
+      <router-view />
+      <the-footer />
     </div>
-    <div class="loading" v-if="isLoading">
-      <img src="@/assets/fry_pan.gif" />
-    </div>
-    <router-view />
   </div>
 </template>
 <script>
+import LoadingOverlay from "./components/LoadingOverlay.vue";
+import TopNavigation from "./components/TopNavigation.vue";
+import TheFooter from "./components/TheFooter.vue";
+
 export default {
-  data() {
-    return {
-      isLoading: true,
+  components: { LoadingOverlay, TopNavigation, TheFooter },
+  mounted() {
+    document.onreadystatechange = () => {
+      if (document.readyState == "complete") {
+        this.$store.commit("SET_IS_LOADING", false);
+      }
     };
-  },
-  created() {
-    this.isLoading = false;
   },
 };
 </script>
 
 <style>
 html {
-  background: url(https://images.pexels.com/photos/3850888/pexels-photo-3850888.jpeg?cs=srgb&dl=pexels-ready-made-3850888.jpg&fm=jpg)
-    center;
+  background: url("./assets/pexels-ready-made-smaller.jpg") center;
+  /* https://images.pexels.com/photos/3850888/pexels-photo-3850888.jpeg?cs=srgb&dl=pexels-ready-made-3850888.jpg&fm=jpg */
   background-size: cover;
+  background-color: rgba(255, 253, 253, 0.85);
   font-family: monospace;
+  font-size: 12pt;
   text-align: center;
   height: 100%;
 }
+
+#loaded-div {
+  min-height: 98vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
 button {
   display: inline-block;
   padding: 0.3em 1.2em;
   margin: 0 0.3em 0.3em 0;
+  border-color:#264653;
   border-radius: 2em;
   box-sizing: border-box;
   text-decoration: none;
   font-family: monospace;
   font-size: 14pt;
-  font-weight: 300;
-  color: #ffffff;
+  font-weight:600;
+  color: #264653;
   background-color: #94c973;
   text-align: center;
   transition: all 0.2s;
@@ -60,7 +63,14 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.dark-green-btns {
+  background-color: #1a4314;
+  color: #ffffff;
+  font-weight:300;
+}
+
+button:hover,
+.router-link-btns:hover {
   background-color: #e76f51;
 }
 
@@ -73,18 +83,13 @@ h1 {
   display: inline-block;
 }
 
-#nav {
-  font-size: 17pt;
-  background-color: rgba(255, 253, 253, 0.7);
-  border-radius: 25px;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .link {
   text-decoration: none;
   color: #264653;
+}
+
+.link:hover {
+  color: #226c8a;
 }
 
 table {
@@ -97,6 +102,45 @@ table {
   font-size: 16pt;
 }
 
+.table-numbered-rows {
+  width: fit-content;
+  border-collapse: separate;
+  border-spacing: 10px 15px;
+}
+
+.table-numbered-rows td {
+  border: 1px solid #1a4314;
+  border-radius: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.table-numbered-rows th {
+  padding: 5px;
+}
+
+.row-number-cell {
+    text-align: center;
+    color: #1a4314;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.link-cell {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: left;
+}
+
+th {
+  background-color: #1a4314;
+  color: white;
+}
+
+.label-input-div {
+  margin-top: 10px;
+}
+
 label {
   font-size: 14pt;
   background-color: rgba(255, 253, 253, 0.5);
@@ -105,7 +149,7 @@ label {
   padding: 2px;
 }
 
-.sr-only {
+.login-register-input-label {
   padding-left: 10px;
   padding-right: 10px;
   margin-right: 5px;
@@ -132,7 +176,7 @@ input[type="number"] {
 }
 
 .alert-danger {
-  color:#fa3706;
+  color: #fa3706;
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
@@ -142,5 +186,3 @@ router-link {
   cursor: pointer;
 }
 </style>
-
-

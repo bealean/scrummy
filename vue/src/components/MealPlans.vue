@@ -1,29 +1,22 @@
 <template>
   <div>
     <h1>My Meal Plans</h1>
-
     <div>
-      <button class="bottom-btn" @click="$router.push('createMealPlan')">
+      <button @click="$router.push('createMealPlan')">
         Create Meal Plan
       </button>
     </div>
-    <div>
-      <button class="home-btns" @click="$router.push('myRecipes')">
-        View My Recipes
-      </button>
-    </div>
-    <!-- <div>
-      <router-link :to="{ name: 'groceries' }">My Grocery List</router-link>
-    </div> -->
 
-    <div class="my-meal-plans-table">
-      <table id="table" v-show="mealPlanList.length > 0">
-        <!-- <th >My Meal Plans</th> -->
+    <div>
+      <table id="my-meal-plans-table" class="table-numbered-rows" v-show="mealPlanList.length > 0">
         <tr v-for="mealPlan in mealPlanList" v-bind:key="mealPlan.mealPlanId">
-          <td>
-            {{ mealPlan.place }} |
+          <td class="row-number-cell" id="meal-plan-number-cell">
+            {{ mealPlan.place }}
+          </td>
+          <td id="meal-plan-link-cell" class="link-cell"> 
             <router-link
-              class="meal-plan-link"
+              class="link"
+              id="meal-plan-link"
               v-bind:to="{
                 name: 'mealPlanDetails',
                 params: { mealPlanId: mealPlan.mealPlanId },
@@ -31,9 +24,10 @@
             >
               {{ mealPlan.mealPlanName }}
             </router-link>
-            |
+            </td>
+            <td id="delete-btn-cell">
             <button
-              class="delete-btn"
+              class="delete-btn dark-green-btns"
               v-on:click.prevent="deleteMealPlan(mealPlan.mealPlanId)"
             >
               Delete
@@ -80,22 +74,35 @@ export default {
 </script>
 
 <style scoped>
-/* .my-meal-plans-table {
-  
-} */
 
 td {
-  border: hidden;
   background-color: rgba(255, 253, 253, 0.472);
-  border-radius: 25px;
-  padding: 8px;
-  padding-left: 15px;
-  padding-right: 15px;
-  display: inline-block;
+  border-width: 2px;
 }
 
-.meal-plan-link {
-  text-decoration: none;
+#meal-plan-link {
+  color: #1323a9;
+}
+
+#meal-plan-link:hover {
+  color: #0000ff;
+}
+
+#meal-plan-link-cell {
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+#meal-plan-number-cell {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#delete-btn-cell {
+  padding: 0px;
+  border: none;
+  background-color: unset;
+  vertical-align: center;
 }
 
 .delete-btn {

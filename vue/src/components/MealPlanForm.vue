@@ -20,11 +20,11 @@
           />
         </div>
       </div>
-      <button class="meal-plan-btns" type="submit" value="Submit">
+      <button class="meal-plan-btns dark-green-btns" type="submit" value="Submit">
         Submit
       </button>
       <button
-        class="meal-plan-btns"
+        class="meal-plan-btns dark-green-btns"
         v-on:click.prevent="cancelAddRecipe()"
         type="cancel"
       >
@@ -99,7 +99,6 @@ export default {
     cancelAddRecipe() {
       this.$router.push("/myMealPlans");
     },
-
   },
   created() {
     recipeService.getAllRecipes().then((response) => {

@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>My Recipes</h1>
-    <!-- <router-link v-bind:to=" { name: 'createNewRecipe'}">Add Custom Recipe</router-link> -->
     <my-recipes-list />
   </div>
 </template>
@@ -11,6 +10,14 @@ import MyRecipesList from "../components/MyRecipesList.vue";
 
 export default {
   components: { MyRecipesList },
+  created() {
+    this.$store.commit("SET_IS_LOADING", true);
+  },
+  mounted() {
+    this.$nextTick(function () {
+      this.$store.commit("SET_IS_LOADING", false);
+    });
+  },
 };
 </script>
 

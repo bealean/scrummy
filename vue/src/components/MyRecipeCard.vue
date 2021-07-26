@@ -38,26 +38,18 @@
     </table>
     <br />
     <router-link
-      class="edit-recipe-btn"
+      class="edit-recipe-btn dark-green-btns"
       v-bind:to="{ name: 'updateRecipe', params: { id: recipe.id } }"
       tag="button"
       >Edit Recipe</router-link
     >
     <button
-      class="recipe-card-bottom-btns"
+      class="dark-green-btns"
       v-on:click.prevent="deleteRecipe(recipe.recipeId)"
     >
       Delete Recipe
     </button>
-    <!-- <button
-      class="recipe-card-bottom-btns"
-      @click="$router.go('/recipeSearch')"
-    >
-      Search Recipes
-    </button> -->
-    <button class="recipe-card-bottom-btns" @click="$router.go(-1)">
-      Back
-    </button>
+    <button class="dark-green-btns" @click="$router.go(-1)">Back</button>
   </div>
 </template>
 
@@ -110,10 +102,6 @@ export default {
 .edit-recipe-btn {
   background-color: #1a4314;
   margin-bottom: 30px;
-}
-
-.recipe-card-bottom-btns {
-  background-color: #1a4314;
 }
 
 th {

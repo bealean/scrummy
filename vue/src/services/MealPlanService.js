@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export default {
     getAllMealPlans() {
         return axios.get('/meal-plans');

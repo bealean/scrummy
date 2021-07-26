@@ -15,7 +15,7 @@ import CreateNewRecipe from '../views/CreateNewRecipe.vue'
 import MyMealPlans from '../views/MyMealPlans.vue'
 import CreateMealPlan from '../views/CreateMealPlan.vue'
 import MealPlanDetails from '../views/MealPlanDetails.vue'
-import MealDetails from '../components/Meal.vue'
+import MealDetails from '../components/MyMeal.vue'
 import Groceries from '../views/Groceries.vue'
 
 

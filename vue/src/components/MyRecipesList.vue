@@ -1,32 +1,26 @@
 <template>
   <div>
-    <table class="table" v-bind:key="user.id">
-      <!-- <th id="my-recipes-table">My Recipes</th> -->
+    <table class="table-numbered-rows" v-bind:key="user.id">
       <tr v-for="recipe in recipeList" v-bind:key="recipe.recipeId">
-        <td>
-          {{ recipe.place }} |
+        <td class="row-number-cell">
+          {{ recipe.place }}
+        </td>
+        <td class="link-cell">
           <router-link
-            class="my-recipes-links"
+            class="link"
             v-bind:to="{
               name: 'myRecipeDetails',
               params: { id: recipe.recipeId },
             }"
             >{{ recipe.name }}</router-link
           >
-          <!-- |
-          <button
-            class="delete-btn"
-            v-on:click.prevent="deleteRecipe(recipe.recipeId)"
-          >
-            Delete
-          </button> -->
-        </td>
+          </td>
       </tr>
     </table>
-    <button class="bottom-btn" @click="$router.push('createNewRecipe')">
+    <button class="bottom-btn dark-green-btns" @click="$router.push('createNewRecipe')">
       Create New Recipe
     </button>
-    <button class="bottom-btn" @click="$router.push('/')">Back</button>
+    <button class="bottom-btn dark-green-btns" @click="$router.push('/')">Back</button>
   </div>
 </template>
 
@@ -42,16 +36,6 @@ export default {
       },
     };
   },
-  // methods: {
-  //   deleteRecipe(recipeId) {
-  //     const choice = confirm("Are you sure you want to delete this recipe?");
-  //     if (choice == true) {
-  //       recipeService.deleteRecipe(recipeId).then(() => {
-  //         this.$router.go();
-  //       });
-  //     }
-  //   },
-  // },
   created() {
     recipeService.getAllRecipes().then((recipe) => {
       this.recipeList = recipe.data;
@@ -64,22 +48,9 @@ export default {
 </script>
 
 <style scoped>
-#my-recipes-table {
-  background-color: #1a4314;
-  font-size: 20pt;
-}
 
 .bottom-btn {
   margin: 20px;
-  background-color: #1a4314;
 }
 
-.my-recipes-links {
-  text-decoration: none;
-  color: #264653;
-}
-
-td {
-  text-align: left;
-}
 </style>

@@ -6,13 +6,13 @@
         rel="stylesheet"
       />
     </head>
-    
+
     <form id="edit-form" v-on:submit.prevent="editRecipe()">
       <h1>Edit Recipe</h1>
       <div>
         <label for="name">Name </label>
         <div>
-          <br/>
+          <br />
           <input
             id="name"
             type="text"
@@ -22,54 +22,55 @@
             size="75"
           />
         </div>
-        <div><br/><label for="servings">Servings </label></div>
-        <div><br/>
+        <div><br /><label for="servings">Servings </label></div>
+        <div>
+          <br />
           <input type="text" id="servings" v-model="recipe.numberOfServings" />
         </div>
         <br />
         <label for="ingredients">Ingredients</label>
         <table>
-        <tr
-          class="ingredients-list-boxes"
-          v-for="(input, k) in inputs"
-          :key="k"
-        >
-          <!--Looping starts for ingredients:-->
-          <input
-            v-model="input.measurementQuantity"
-            type="text"
-            placeholder="quantity"
-          />
-          <input
-            v-model="input.measurementType"
-            type="text"
-            placeholder="measurement type"
-          />
-          <input
-            v-model="input.ingredientName"
-            placeholder="ingredient"
-            type="text"
-            minlength="1"
-            maxlength="500"
-            size="50"
-          />
-          <span>
-            <i
-              class="fas fa-minus-circle"
-              @click="remove(k)"
-              v-show="k || (!k && inputs.length > 1)"
-            ></i>
-            <i
-              class="fas fa-plus-circle"
-              @click="add(k)"
-              v-show="k == inputs.length - 1"
-            ></i>
-          </span>
-        </tr>
+          <tr
+            class="ingredients-list-boxes"
+            v-for="(input, k) in inputs"
+            :key="k"
+          >
+            <!--Looping starts for ingredients:-->
+            <input
+              v-model="input.measurementQuantity"
+              type="text"
+              placeholder="quantity"
+            />
+            <input
+              v-model="input.measurementType"
+              type="text"
+              placeholder="measurement type"
+            />
+            <input
+              v-model="input.ingredientName"
+              placeholder="ingredient"
+              type="text"
+              minlength="1"
+              maxlength="500"
+              size="50"
+            />
+            <span>
+              <i
+                class="fas fa-minus-circle"
+                @click="remove(k)"
+                v-show="k || (!k && inputs.length > 1)"
+              ></i>
+              <i
+                class="fas fa-plus-circle"
+                @click="add(k)"
+                v-show="k == inputs.length - 1"
+              ></i>
+            </span>
+          </tr>
         </table>
         <br />
-        <label for="directions">Directions</label> 
-        <div style="margin-top: 10px;">  
+        <label for="directions">Directions</label>
+        <div style="margin-top: 10px">
           <textarea
             rows="20"
             cols="200"
@@ -79,11 +80,11 @@
         </div>
       </div>
       <br />
-      <button class="submit-btn" type="submit" value="Submit">
+      <button class="submit-btn dark-green-btns" type="submit" value="Submit">
         Save Changes
       </button>
       <button
-        class="submit-btn"
+        class="submit-btn dark-green-btns"
         v-on:click.prevent="cancelEditRecipe"
         type="cancel"
       >

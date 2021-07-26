@@ -1,44 +1,50 @@
 <template>
   <div>
-    <br />
-    <form class="search-form" v-on:submit.prevent="submitSearch()">
-      Enter ingredient(s) separated by a comma with no spaces
-      <br />(banana,peanut butter,bread): <br /><br /><input
-        size="50"
-        type="text"
-        placeholder="Ingredients"
-        v-model="ingredients"
-        required
-      />
-      <br />
-      <br />
-      Limit to
-      <input
-        type="number"
-        min="1"
-        max="100"
-        v-model="limitNumber"
-        placeholder="10"
-      />
-      results.
-      <br />
-      <br />
-      <button class="submit-btn" type="submit" value="Submit">Submit</button>
-      <button
-        class="submit-btn"
-        v-on:click.prevent="cancelSearch"
-        type="cancel"
-      >
-        Cancel
+    <form id="search-form" v-on:submit.prevent="submitSearch()">
+      <div id="instructions-div">
+        Enter ingredient(s) separated by a comma with no spaces 
+        (banana,peanut butter,bread):
+      </div>
+      <div class="search-input-div">
+        <input
+          size="50"
+          type="text"
+          placeholder="Ingredients"
+          v-model="ingredients"
+          required
+        />
+      </div>
+      <div class="search-input-div" id="limit-div">
+        Limit to
+        <input
+          type="number"
+          min="1"
+          max="100"
+          v-model="limitNumber"
+          placeholder="10"
+        />
+        results.
+      </div>
+      <button class="submit-btn dark-green-btns" type="submit" value="Submit">
+        Submit
       </button>
+      <router-link
+        tag="button"
+        class="dark-green-btns"
+        v-bind:to="{ name: 'home' }"
+        >Cancel</router-link
+      >
     </form>
-    <div class="table" v-show="searchSubmitted === true">
-      <table>
-        <th>Search Results</th>
-
+    <div v-show="searchSubmitted === true">
+      <table class="table-numbered-rows">
+        <tr>
+          <th colspan="2">Search Results</th>
+        </tr>
         <tr v-for="recipe in recipeList" v-bind:key="recipe.id">
-          <td>
-            {{ recipe.place }} |
+          <td class="row-number-cell">
+            {{ recipe.place }}
+          </td>
+          <td class="link-cell">
             <router-link
               class="link"
               v-bind:to="{
@@ -51,8 +57,6 @@
         </tr>
       </table>
     </div>
-    <br />
-    <br />
   </div>
 </template>
 
@@ -70,6 +74,7 @@ export default {
   },
   methods: {
     submitSearch() {
+      this.$store.commit("SET_IS_LOADING", true);
       spoonacularService
         .getSearchResults(this.ingredients, this.limitNumber)
         .then((recipe) => {
@@ -80,11 +85,9 @@ export default {
           for (let i = 0; i < this.recipeList.length; i++) {
             this.recipeList[i].place = i + 1;
           }
+          this.searchSubmitted = true;
+          this.$store.commit("SET_IS_LOADING", false);
         });
-      this.searchSubmitted = true;
-    },
-    cancelSearch() {
-      this.$router.push("/");
     },
   },
   computed: {},
@@ -92,52 +95,20 @@ export default {
 </script>
 
 <style scoped>
-form {
-  background-color: #94c973;
-  border-radius: 25px;
-  padding: 15px;
+#search-form {
+  margin-top: 10px;
   font-size: 16pt;
   width: 40%;
   min-width: 500px;
+  padding: 20px;
 }
 
-.search-form {
-  margin-top: 0%;
+.search-input-div {
+  margin-top: 20px;
 }
 
-.submit-btn {
-  background-color: #1a4314;
+#limit-div {
+  margin-bottom: 20px;
 }
 
-th {
-  background-color: #1a4314;
-}
-
-td {
-  width: 50%;
-}
-
-.table {
-  background-color: #94c973;
-  border-radius: 25px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 5px;
-  width: 50%;
-}
-
-.search-results-btn {
-  padding: 25px;
-  width: 50%;
-}
-
-table {
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 16pt;
-}
-
-.link {
-  text-decoration: none;
-}
 </style>

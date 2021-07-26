@@ -5,40 +5,63 @@
       <div class="alert alert-danger" role="alert" v-if="registrationErrors">
         {{ registrationErrorMsg }}
       </div>
-      <br />
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
-        id="username"
-        class="form-control"
-        placeholder="Username"
-        v-model="user.username"
-        required
-        autofocus
-      /><br />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        placeholder="Password"
-        v-model="user.password"
-        required
-      />
-      <input
-        type="password"
-        id="confirmPassword"
-        class="form-control"
-        placeholder="Confirm Password"
-        v-model="user.confirmPassword"
-        required
-      />
-      <br />
-      <br />
-      <router-link class="login-btn" :to="{ name: 'login' }"
-        >Have an account?</router-link
-      >
-      <br /><button class="btn btn-lg btn-primary btn-block" type="submit">
+      <table id="register-input-table">
+        <tr id="username-row">
+          <td>
+            <label for="username" class="login-register-input-label"
+              >Username</label
+            >
+          </td>
+          <td>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              placeholder="Username"
+              v-model="user.username"
+              required
+              autofocus
+              ref="focused"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="password" class="login-register-input-label"
+              >Password</label
+            >
+          </td>
+          <td>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              placeholder="Password"
+              v-model="user.password"
+              required
+            />
+          </td>
+        </tr>
+        <tr id="confirm-password-row">
+          <td></td>
+          <td>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control"
+              placeholder="Confirm Password"
+              v-model="user.confirmPassword"
+              required
+            />
+          </td>
+        </tr>
+      </table>
+      <div id="login-link-div">
+        <router-link class="login-btn" :to="{ name: 'login' }"
+          >Have an account?</router-link
+        >
+      </div>
+      <button class="btn btn-lg btn-primary btn-block dark-green-btns" type="submit">
         Create Account
       </button>
     </form>
@@ -92,14 +115,16 @@ export default {
       this.registrationErrorMsg = "There were problems registering this user.";
     },
   },
+    mounted() {
+      this.$nextTick(function () {
+      this.$refs.focused.focus();
+    });
+  },
 };
 </script>
 
 <style scoped>
 h1 {
-  color: #e76f51;
-  background-color: #264653;
-  border-radius: 25px;
   padding: 15px;
   font-size: 24pt;
 }
@@ -109,12 +134,32 @@ button {
   background-color: #1a4314;
 }
 
-input {
-  margin: 15px 0px 5px 5px;
-}
-
 .login-btn {
   font-size: 12pt;
   color: #264653;
+}
+
+#register-input-table {
+  padding: 0px;
+  margin-top: 0px;
+  border-spacing: 0px;
+}
+
+#register-input-table > tr,
+td {
+  padding: 0;
+  border: none;
+}
+
+#username-row > td {
+  padding-bottom: 20px;
+}
+
+#confirm-password-row > td {
+  padding-top: 5px;
+}
+
+#login-link-div {
+  margin-top: 20px;
 }
 </style>

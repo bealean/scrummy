@@ -1,16 +1,16 @@
 <template>
   <div>
     <h1>Grocery List</h1>
-    <br />
-    <div id="grocery-search">
-      <br />
+
+    <div id="save-ingredient-div">
+
 
       <form
         id="add-new-ingredient-to-grocery-list"
         v-on:submit.prevent="createGroceryItem()"
       >
         <input type="text" v-model="newItem" placeholder="Add new ingredient" />
-        <button type="submit" class="btn-save">Save</button>
+        <button type="submit" class="btn-save dark-green-btns">Save</button>
       </form>
     </div>
     <div class="grocery-list-table">
@@ -34,18 +34,21 @@
           v-for="item in filteredItems"
           v-bind:key="item.name"
           v-bind:class="item.done ? 'checked' : 'unchecked'"
-        >
+        ><td class="grocery-item-cells">
           <input
             type="checkbox"
             v-model="item.done"
             @change="moveItem(item)"
-          /><label>
+          />
+          
+          <label>
             {{ item.name }}
 
             <span id="delete" v-on:click="deleteGroceryItem(item)">
               ×</span
             ></label
           >
+          </td>
         </tr>
       </table>
     </div>
@@ -121,7 +124,10 @@ export default {
   background-color: #94c973;
   border-radius: 25px;
   width: 500px;
-  margin: 0 auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom: 0px;
+  padding: 5px;
 }
 
 .unchecked {
@@ -141,13 +147,28 @@ export default {
 }
 
 #add-new-ingredient-to-grocery-list {
-  padding-bottom: 20px;
-  margin: 0;
+  border: 5px dotted;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#save-ingredient-div {
+  background: #94c973;
+  border-radius: 25px;
+  width: 90%;
+  max-width: 500px;
+  margin: 0px auto 20px auto;
+  padding: 15px;
 }
 
 .grocery-list-table {
-  width: 496px;
+  width: fit-content;
   margin: auto;
+}
+
+.grocery-item-cells {
+  display: flex;
+  align-items: center;
 }
 
 input[type="checkbox"] {
@@ -166,23 +187,14 @@ input[type="checkbox"] ~ label {
 
 #search-row {
   border: 5px dotted;
-  border-right: none;
-  border-left: none;
-  border-top: none;
+  border-radius: 25px;
+  padding: 15px;
 }
 
 #search-div {
-  margin: auto;
-
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-  vertical-align: middle;
+  margin-top: 20px;
+  margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
-  float: middle;
-  text-align: center;
-  padding-left: 55px;
 }
 </style>

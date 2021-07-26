@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 export default {
-
-
     getAllDailyPlans(mealPlanId) {
         return axios.get('/my-daily-plans', mealPlanId);
     },

@@ -2,43 +2,62 @@
   <div id="login" class="text-center">
     <form class="form-signin" @submit.prevent="login">
       <h1 class="h3 mb-3 font-weight-normal">Scrummy Meal Planner</h1>
-      <h2>Please Sign In</h2>
+      <div
+        id="sign-in-message"
+        class="user-message"
+        v-if="!this.$route.query.registration"
+      >
+        Sign in for full functionality,<br />
+        or click above to Search Recipes Incognito.
+      </div>
       <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
-        Invalid username and password!
+        Invalid username or password!
       </div>
       <div
-        class="alert alert-success"
+        class="alert alert-success user-message"
         role="alert"
         v-if="this.$route.query.registration"
       >
         Thank you for registering, please sign in.
       </div>
-      <br />
-      <label id="username-field" for="username" class="sr-only">Username</label>
-      <input
-        type="text"
-        id="username"
-        class="form-control"
-        placeholder="Username"
-        v-model="user.username"
-        required
-        autofocus
-      />
-      <div>&nbsp;</div>
-      <br />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        placeholder="Password"
-        v-model="user.password"
-        required
-      />
-      <br />
-      <button type="submit">Sign in</button> 
-      <br />
-      <button id="register" @click="$router.push('register')">Need an account?</button>
+      <div class="label-input-div">
+        <label
+          id="username-field"
+          for="username"
+          class="login-register-input-label"
+          >Username</label
+        >
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          placeholder="Username"
+          v-model="user.username"
+          required
+          autofocus
+        />
+      </div>
+      <div class="label-input-div">
+        <label for="password" class="login-register-input-label"
+          >Password</label
+        >
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="Password"
+          v-model="user.password"
+          required
+        />
+      </div>
+      <button class="dark-green-btns" type="submit">Sign in</button>
+      <button
+        id="register"
+        class="dark-green-btns"
+        @click="$router.push('register')"
+      >
+        Need an account?
+      </button>
     </form>
   </div>
 </template>
@@ -82,24 +101,24 @@ export default {
 </script>
 <style scoped>
 h1 {
-  color: #e76f51;
-  background-color: #264653;
-  border-radius: 25px;
   padding: 15px;
   font-size: 24pt;
 }
 
 button {
   margin-top: 30px;
-  background-color: #1a4314;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-button:hover {
-  background-color: #e76f51;
-}
-
-#register {
+#register,
+#searchAnonymously {
   margin-bottom: 30px;
   margin-top: 15px;
+}
+
+.user-message {
+  margin-bottom: 20px;
 }
 </style>

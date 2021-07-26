@@ -1,13 +1,13 @@
 <template>
-<!-- Displays editable recipe from Spoonacular API and allows you to save to MyRecipes -->
+  <!-- Displays editable recipe from Spoonacular API and allows you to save to MyRecipes -->
   <div>
     <br />
     <h1>Edit Recipe</h1>
     <form class="update-form" v-on:submit.prevent="addNewRecipe()">
-      <br/>
+      <br />
       <div>
         <label for="name">Name</label>
-        <br/>
+        <br />
         <input
           id="name"
           type="text"
@@ -18,9 +18,8 @@
         />
         <br />
         <label for="servings">Servings</label>
-        <br/>
+        <br />
         <div>
-          
           <input type="text" id="servings" v-model="recipe.numberOfServings" />
         </div>
         <br />
@@ -31,7 +30,6 @@
           v-bind:key="ingredient.id"
         >
           <!--Looping starts for ingredients:-->
-          <!-- <textarea v-model="recipe.recipeIngredients" /> -->
           <input v-model="ingredient.measurementQuantity" type="text" />
           <input v-model="ingredient.measurementType" type="text" />
           <input
@@ -46,9 +44,8 @@
         <br />
         <label>Directions</label>
         <div>
-          
           <textarea
-          id="textarea"
+            id="textarea"
             rows="20"
             cols="200"
             style="width: 500px"
@@ -57,11 +54,11 @@
         </div>
       </div>
       <br />
-      <button class="submit-btn" type="submit" value="Submit">
+      <button class="submit-btn dark-green-btns" type="submit" value="Submit">
         Save to My Recipes
       </button>
       <button
-        class="submit-btn"
+        class="submit-btn dark-green-btns"
         v-on:click.prevent="cancelAddRecipe()"
         type="cancel"
       >
@@ -78,7 +75,6 @@ import recipeService from "../services/RecipeService.js";
 export default {
   data() {
     return {
-      //recipe: {},
       recipe: {
         id: "",
         name: "",
@@ -128,7 +124,6 @@ export default {
       .getRecipeDetails(this.$route.params.id)
       .then((recipeData) => {
         this.recipe = recipeData.data;
-        console.log(this.recipe);
         this.recipe.directions = this.recipe.directions.replace(
           /<\/?[^>]+>/gi,
           ""
@@ -154,5 +149,4 @@ export default {
 .submit-btn {
   background-color: #1a4314;
 }
-
 </style>

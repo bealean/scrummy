@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export default {
     getRecipeIngredientsByRecipeId(recipeId) {
         return axios.get(`/recipe-ingredient/${recipeId}`);

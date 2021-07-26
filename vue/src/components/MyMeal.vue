@@ -20,9 +20,9 @@
           </select>
           <br />
         </div>
-        <button class="submit-btn" type="submit" value="Submit">Save</button>
+        <button class="submit-btn dark-green-btns" type="submit" value="Submit">Save</button>
         <button
-          class="submit-btn"
+          class="submit-btn dark-green-btns"
           v-on:click.prevent="cancelAddRecipe()"
           type="cancel"
         >

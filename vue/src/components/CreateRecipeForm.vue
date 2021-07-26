@@ -87,9 +87,9 @@
         </div>
       </div>
       <br />
-      <button class="submit-btn" type="submit" value="Submit">Submit</button>
+      <button class="submit-btn dark-green-btns" type="submit" value="Submit">Submit</button>
       <button
-        class="submit-btn"
+        class="submit-btn dark-green-btns"
         v-on:click.prevent="cancelNewRecipe"
         type="cancel"
       >

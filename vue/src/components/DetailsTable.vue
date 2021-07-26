@@ -1,5 +1,4 @@
 <template>
-  <!-- After clicking on RecipeList recipe name, this displays the recipe details from Spoonacular and allows you to click edit and goes to RecipeForm -->
   <div class="recipe-details">
     <table>
       <th id="recipe-header">
@@ -38,16 +37,16 @@
       </tr>
     </table>
     <br />
-
-    <router-link
-      id="edit-btn"
-      tag="button"
-      v-bind:to="{ name: 'addRecipe', params: { id: recipe.id } }"
-      >Edit Recipe</router-link
-    >
-    <button class="recipe-card-bottom-btns" @click="$router.go(-1)">
-      Back
-    </button>
+    <span v-if="$store.state.token != ''">
+      <router-link
+        id="edit-btn"
+        tag="button"
+        class="dark-green-btns"
+        v-bind:to="{ name: 'addRecipe', params: { id: recipe.id } }"
+        >Edit Recipe</router-link
+      >
+    </span>
+    <button class="dark-green-btns" @click="$router.go(-1)">Back</button>
   </div>
 </template>
 
@@ -64,14 +63,8 @@ export default {
       },
     };
   },
-
-  methods: {
-    alertLogin() {
-      alert("Please log in to add to saved recipes!");
-    },
-  },
-
   created() {
+    this.$store.commit("SET_IS_LOADING", true);
     spoonacularService
       .getRecipeDetails(this.$route.params.id)
       .then((recipeData) => {
@@ -81,14 +74,16 @@ export default {
           /<\/?[^>]+>/gi,
           ""
         );
+        this.$store.commit("SET_IS_LOADING", false);
       });
   },
 };
 </script>
 
-<style>
+<style scoped>
 .recipe-details {
-  margin: 4em auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 50%;
   text-align: center;
 }
@@ -103,20 +98,11 @@ table {
   border-spacing: 0 15px;
 }
 
-th {
-  background-color: #1a4314;
-  color: white;
-}
-
 th,
 td,
 tr {
   text-align: center;
   border: 1px solid black;
   padding: 5px;
-}
-
-#edit-btn {
-  background-color: #1a4314;
 }
 </style>
