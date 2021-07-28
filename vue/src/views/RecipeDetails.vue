@@ -1,14 +1,13 @@
 <template>
   <div>
-    <details-table />
+    <recipe-details />
   </div>
 </template>
 
 <script>
-import DetailsTable from "../components/DetailsTable.vue";
-
+import RecipeDetails from "../components/RecipeDetails";
 export default {
-  components: { DetailsTable },
+  components: { RecipeDetails },
 };
 </script>
 

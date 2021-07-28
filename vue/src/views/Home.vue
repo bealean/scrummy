@@ -7,22 +7,22 @@
     <br /><br />
     <div class="home-btn-container">
       <div>
-        <button class="home-btns" @click="$router.push('searchRecipes')">
+        <button class="home-btns" @click="$router.push('search-recipes')">
           Search Recipes
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('createNewRecipe')">
+        <button class="home-btns" @click="$router.push('create-recipe')">
           Create Recipe
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('myRecipes')">
+        <button class="home-btns" @click="$router.push('my-recipes')">
           My Recipes
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('myMealPlans')">
+        <button class="home-btns" @click="$router.push('my-meal-plans')">
           My Meal Plans
         </button>
       </div>

@@ -2,7 +2,7 @@
   <div>
     <h1 id="recipe-header">Meal Plan Details: {{ mealPlan.mealPlanName }}</h1>
     <div>
-      <div>
+      <div v-if="mealPlan.mealPlanId">
         <router-link
           v-bind:to="{
             name: 'groceries',
@@ -13,7 +13,7 @@
         >
       </div>
     </div>
-    <div>
+    <div v-if="mealPlan.mealPlanId">
       <router-link
         v-bind:to="{
           name: 'myMealPlans',
@@ -61,8 +61,8 @@
           <router-link
             class="recipe-name-link"
             v-bind:to="{
-              name: 'myRecipeDetails',
-              params: { id: recipe.recipeId },
+              name: 'recipeDetails',
+              params: { id: recipe.recipeId, newOrExisting: 'existing' },
             }"
           >
             {{ recipe.name }}</router-link

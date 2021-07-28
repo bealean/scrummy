@@ -8,7 +8,12 @@
     </head>
 
     <form id="edit-form" v-on:submit.prevent="editRecipe()">
-      <h1>Edit Recipe</h1>
+      <span v-if="!isNewRecipe">
+        <h1>Edit Recipe</h1>
+      </span>
+      <span v-if="isNewRecipe">
+        <h1>Edit/Save Recipe</h1>
+      </span>
       <div>
         <label for="name">Name </label>
         <div>
@@ -80,14 +85,17 @@
         </div>
       </div>
       <br />
-      <button class="submit-btn dark-green-btns" type="submit" value="Submit">
-        Save Changes
-      </button>
-      <button
-        class="submit-btn dark-green-btns"
-        v-on:click.prevent="cancelEditRecipe"
-        type="cancel"
-      >
+      <span v-if="!isNewRecipe">
+        <button class="dark-green-btns" type="submit" value="Submit">
+          Save
+        </button>
+      </span>
+      <span v-if="isNewRecipe">
+        <button class="dark-green-btns" type="submit" value="Submit">
+          Save to My Recipes
+        </button>
+      </span>
+      <button class="dark-green-btns" @click="$router.go(-1)" type="cancel">
         Cancel
       </button>
     </form>
@@ -100,6 +108,7 @@ import recipeService from "../services/RecipeService.js";
 export default {
   data() {
     return {
+      isNewRecipe: false,
       recipe: {
         recipeId: "",
         name: "",
@@ -128,17 +137,33 @@ export default {
         recipeIngredients: this.inputs,
         numberOfServings: this.recipe.numberOfServings,
       };
-      recipeService
-        .updateRecipe(editedRecipe)
-        .then((response) => {
-          if (response.status === 200) {
-            alert("Recipe updated!");
-            this.$router.push("/myRecipes");
-          }
-        })
-        .catch((err) => {
-          console.error(err + " problem updating recipe.");
-        });
+      if (this.isNewRecipe) {
+        recipeService
+          .newRecipe(editedRecipe)
+          .then((response) => {
+            if (response.status === 201) {
+              alert("Recipe Added!");
+              this.$router.push("/my-recipes");
+            }
+          })
+          .catch((error) => {
+            alert("There was a problem adding the recipe. Please retry.");
+            console.error("Problem adding recipe." + error);
+          });
+      } else {
+        recipeService
+          .updateRecipe(editedRecipe)
+          .then((response) => {
+            if (response.status === 200) {
+              alert("Recipe updated!");
+              this.$router.push("/my-recipes");
+            }
+          })
+          .catch((error) => {
+            alert("There was a problem updating the recipe. Please retry.");
+            console.error(error + " problem updating recipe.");
+          });
+      }
     },
     add() {
       this.inputs.push({
@@ -152,15 +177,30 @@ export default {
     remove(index) {
       this.inputs.splice(index, 1);
     },
-    cancelEditRecipe() {
-      this.$router.push("/myRecipes");
-    },
   },
   created() {
-    recipeService.getRecipe(this.$route.params.id).then((response) => {
-      this.recipe = response.data;
+    if (
+      this.$store.state.prevRoute !=
+      `/recipe-details/${this.$route.params.id}/${this.$route.params.newOrExisting}`
+    ) {
+      alert("Edit Recipe must be opened from Recipe Details.");
+      this.$router.push("/");
+    } else {
+      this.$store.commit("SET_IS_LOADING", true);
+      this.recipe = this.$store.state.recipe;
+      this.$store.commit("SET_RECIPE", {});
       this.inputs = this.recipe.recipeIngredients;
-    });
+      if (this.$route.params.newOrExisting === "new") {
+        this.isNewRecipe = true;
+        this.recipe.directions = this.recipe.directions.replace(
+          /<\/?[^>]+>/gi,
+          ""
+        );
+      }
+    }
+  },
+  mounted() {
+    this.$store.commit("SET_IS_LOADING", false);
   },
 };
 </script>
@@ -173,10 +213,6 @@ export default {
   max-width: 1080px;
   text-align: center;
   padding: 5px;
-}
-
-.submit-btn {
-  background-color: #1a4314;
 }
 
 tr {

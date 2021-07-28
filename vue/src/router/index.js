@@ -7,10 +7,8 @@ import Register from '../views/Register.vue'
 import store from '../store/index'
 import SearchRecipes from '../views/SearchRecipes.vue'
 import RecipeDetails from '../views/RecipeDetails.vue'
-import UpdateRecipe from '../views/UpdateRecipe.vue'
-import AddRecipe from '../views/AddRecipe.vue'
+import EditRecipe from '../views/EditRecipe.vue'
 import MyRecipes from '../views/MyRecipes.vue'
-import MyRecipeDetails from '../views/MyRecipeDetails.vue'
 import CreateNewRecipe from '../views/CreateNewRecipe.vue'
 import MyMealPlans from '../views/MyMealPlans.vue'
 import CreateMealPlan from '../views/CreateMealPlan.vue'
@@ -67,7 +65,7 @@ const router = new Router({
       }
     },
     {
-      path: "/searchRecipes",
+      path: "/search-recipes",
       name: "searchRecipes",
       component: SearchRecipes,
       meta: {
@@ -75,7 +73,7 @@ const router = new Router({
       }
     },
     {
-      path: "/recipeDetails/:id",
+      path: "/recipe-details/:id/:newOrExisting",
       name: "recipeDetails",
       component: RecipeDetails,
       meta: {
@@ -83,23 +81,15 @@ const router = new Router({
       }
     },
     {
-      path: "/updateRecipe/:id",
-      name: "updateRecipe",
-      component: UpdateRecipe,
+      path: "/edit-recipe/:id/:newOrExisting",
+      name: "editRecipe",
+      component: EditRecipe,
       meta: {
         requiresAuth: true,
       }
     },
     {
-      path: "/addRecipe",
-      name: "addRecipe",
-      component: AddRecipe,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: "/myRecipes",
+      path: "/my-recipes",
       name: "myRecipes",
       component: MyRecipes,
       meta: {
@@ -107,15 +97,7 @@ const router = new Router({
       }
     },
     {
-      path: "/myRecipes/:id",
-      name: "myRecipeDetails",
-      component: MyRecipeDetails,
-      meta: {
-        requiresAuth: true,
-      }
-    },
-    {
-      path: "/createNewRecipe",
+      path: "/create-recipe",
       name: "createNewRecipe",
       component: CreateNewRecipe,
       meta: {
@@ -123,7 +105,7 @@ const router = new Router({
       }
     },
     {
-      path: "/myMealPlans",
+      path: "/my-meal-plans",
       name: "myMealPlans",
       component: MyMealPlans,
       meta: {
@@ -131,7 +113,7 @@ const router = new Router({
       }
     },
     {
-      path: "/createMealPlan",
+      path: "/create-meal-plan",
       name: "createMealPlan",
       component: CreateMealPlan,
       meta: {
@@ -139,7 +121,7 @@ const router = new Router({
       }
     },
     {
-      path: "/mealPlanDetails/:mealPlanId",
+      path: "/meal-plan-details/:mealPlanId",
       name: "mealPlanDetails",
       component: MealPlanDetails,
       meta: {
@@ -147,7 +129,7 @@ const router = new Router({
       }
     },
     {
-      path: "/mealPlanDetails/:mealPlanId/meals/:mealId",
+      path: "/meal-plan-details/:mealPlanId/meals/:mealId",
       name: "mealDetails",
       component: MealDetails,
       meta: {
@@ -155,7 +137,7 @@ const router = new Router({
       }
     },
     {
-      path: "/groceryList/:mealPlanId",
+      path: "/grocery-list/:mealPlanId",
       name: "groceries",
       component: Groceries,
       meta: {
@@ -163,10 +145,16 @@ const router = new Router({
       }
     },
 
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })
 
 router.beforeEach((to, from, next) => {
+
+  store.commit("SET_PREV_ROUTE", from.path);
+  
   // Determine if the route requires Authentication
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
 

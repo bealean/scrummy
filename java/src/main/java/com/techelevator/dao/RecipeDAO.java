@@ -9,6 +9,8 @@ public interface RecipeDAO {
 
     List<Recipe> getMyRecipes(long userId);
 
+    Recipe getRecipeById(long recipeId, long userId) throws RecipeNotFoundException;
+
     Recipe getRecipeById(long recipeId) throws RecipeNotFoundException;
 
     void addRecipe(Recipe recipe);

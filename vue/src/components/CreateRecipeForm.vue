@@ -141,7 +141,7 @@ export default {
         .then((response) => {
           if (response.status === 201) {
             alert("Recipe Added!");
-            this.$router.push("/myRecipes");
+            this.$router.push("/my-recipes");
           }
         })
         .catch((err) => {
@@ -160,7 +160,7 @@ export default {
     },
 
     cancelNewRecipe() {
-      this.$router.push("/myRecipes");
+      this.$router.push("/my-recipes");
     },
   },
 };
@@ -190,7 +190,6 @@ export default {
 }
 
 .submit-btn {
-  background-color: #1a4314;
   width: 200px;
   height: 45px;
 }

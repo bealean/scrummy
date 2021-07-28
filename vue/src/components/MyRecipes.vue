@@ -9,15 +9,15 @@
           <router-link
             class="link"
             v-bind:to="{
-              name: 'myRecipeDetails',
-              params: { id: recipe.recipeId },
+              name: 'recipeDetails',
+              params: { id: recipe.recipeId, newOrExisting: 'existing' },
             }"
             >{{ recipe.name }}</router-link
           >
           </td>
       </tr>
     </table>
-    <button class="bottom-btn dark-green-btns" @click="$router.push('createNewRecipe')">
+    <button class="bottom-btn dark-green-btns" @click="$router.push('create-recipe')">
       Create New Recipe
     </button>
     <button class="bottom-btn dark-green-btns" @click="$router.push('/')">Back</button>

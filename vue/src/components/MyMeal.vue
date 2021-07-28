@@ -4,7 +4,6 @@
       Meal Plan:
       {{ meal.mealType }}
     </h1>
-
     <div>
       <form v-on:submit.prevent="addRecipeToMeal()">
         <h2><label>Select Recipe</label></h2>
@@ -20,24 +19,28 @@
           </select>
           <br />
         </div>
-        <button class="submit-btn dark-green-btns" type="submit" value="Submit">Save</button>
+        <button class="submit-btn dark-green-btns" type="submit" value="Submit">
+          Save
+        </button>
         <button
           class="submit-btn dark-green-btns"
-          v-on:click.prevent="cancelAddRecipe()"
+          v-on:click.prevent="returnToMealPlanDetails()"
           type="cancel"
         >
           Go Back
         </button>
       </form>
     </div>
-    <div class="meal-plan-items-list" v-show="meal.recipes.length > 0">
-      <ul
-        class="meal-plan-list"
-        v-for="recipe in meal.recipes"
-        v-bind:key="recipe.recipeId"
-      >
-        <li>{{ recipe.name }}</li>
-      </ul>
+    <div v-if="meal.recipes">
+      <div class="meal-plan-items-list" v-show="meal.recipes.length > 0">
+        <ul
+          class="meal-plan-list"
+          v-for="recipe in meal.recipes"
+          v-bind:key="recipe.recipeId"
+        >
+          <li>{{ recipe.name }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -68,19 +71,35 @@ export default {
             alert(`Recipe added to ${this.meal.mealType}!`);
             this.$router.go();
           }
+        })
+        .catch((error) => {
+          alert("There was a problem adding the recipe. Please retry.");
+          console.error(error + " problem adding recipe.");
         });
     },
-    cancelAddRecipe() {
-      this.$router.push(`/mealPlanDetails/${this.$route.params.mealPlanId}`);
+    returnToMealPlanDetails() {
+      this.$router.push(`/meal-plan-details/${this.$route.params.mealPlanId}`);
     },
   },
   created() {
-    mealService.getMealById(this.$route.params.mealId).then((response) => {
-      this.meal = response.data;
-    });
-    recipeService.getAllRecipes().then((response) => {
-      this.myRecipes = response.data;
-    });
+    mealService
+      .getMealById(this.$route.params.mealId)
+      .then((response) => {
+        this.meal = response.data;
+      })
+      .catch((error) => {
+        alert("There was a problem retrieving the meal.");
+        console.error("Problem retrieving the meal: " + error);
+      });
+    recipeService
+      .getAllRecipes()
+      .then((response) => {
+        this.myRecipes = response.data;
+      })
+      .catch((error) => {
+        alert("There was a problem retrieving the recipe list.");
+        console.error("Problem retrieving the recipe list: " + error);
+      });
   },
 };
 </script>

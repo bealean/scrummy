@@ -20,7 +20,9 @@ export default new Vuex.Store({
   state: {
     token: currentToken || '',
     user: currentUser || {},
-    isLoading: true
+    isLoading: true,
+    prevRoute: null,
+    recipe: {}
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -35,6 +37,14 @@ export default new Vuex.Store({
     SET_IS_LOADING(state, isLoading) {
       state.isLoading = isLoading;
       localStorage.setItem('isLoading', isLoading);
+    },
+    SET_PREV_ROUTE(state, prevRoute) {
+      state.prevRoute = prevRoute;
+      localStorage.setItem('prevRoute', prevRoute);
+    },
+    SET_RECIPE(state, recipe) {
+      state.recipe = recipe;
+      localStorage.setItem('recipe', recipe);
     },
     LOGOUT(state) {
       localStorage.removeItem('token');

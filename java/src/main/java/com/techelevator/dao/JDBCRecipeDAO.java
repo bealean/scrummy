@@ -33,6 +33,17 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
+    public Recipe getRecipeById(long recipeId, long userId) throws RecipeNotFoundException {
+        String sql = "SELECT recipe_id, user_id, name, directions, servings FROM recipes WHERE recipe_id = ? AND user_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, recipeId, userId);
+        if (result.next()) {
+            return mapRowToRecipe(result);
+        } else {
+            throw new RecipeNotFoundException();
+        }
+    }
+
+    @Override
     public Recipe getRecipeById(long recipeId) throws RecipeNotFoundException {
         String sql = "SELECT recipe_id, user_id, name, directions, servings FROM recipes WHERE recipe_id = ?";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, recipeId);

@@ -2,8 +2,8 @@
   <div>
     <form id="search-form" v-on:submit.prevent="submitSearch()">
       <div id="instructions-div">
-        Enter ingredient(s) separated by a comma with no spaces 
-        (banana,peanut butter,bread):
+        Enter ingredient(s) separated by a comma with no spaces (banana,peanut
+        butter,bread):
       </div>
       <div class="search-input-div">
         <input
@@ -49,7 +49,7 @@
               class="link"
               v-bind:to="{
                 name: 'recipeDetails',
-                params: { id: recipe.id },
+                params: { id: recipe.id, newOrExisting: 'new' },
               }"
               >{{ recipe.title }}</router-link
             >
@@ -77,8 +77,8 @@ export default {
       this.$store.commit("SET_IS_LOADING", true);
       spoonacularService
         .getSearchResults(this.ingredients, this.limitNumber)
-        .then((recipe) => {
-          this.recipeList = recipe.data;
+        .then((response) => {
+          this.recipeList = response.data;
           if (this.recipeList.length === 0) {
             alert("No recipes found");
           }
@@ -86,6 +86,16 @@ export default {
             this.recipeList[i].place = i + 1;
           }
           this.searchSubmitted = true;
+          this.$store.commit("SET_IS_LOADING", false);
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 500) {
+            alert("Server error. Please try again later.");
+            console.log("Server error: " + error);
+          } else {
+            alert("Error retrieving recipe list.");
+            console.log("Error retrieving recipes: " + error);
+          }
           this.$store.commit("SET_IS_LOADING", false);
         });
     },
@@ -110,5 +120,4 @@ export default {
 #limit-div {
   margin-bottom: 20px;
 }
-
 </style>

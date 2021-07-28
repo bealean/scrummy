@@ -3,13 +3,15 @@
     <h1>Grocery List</h1>
 
     <div id="save-ingredient-div">
-
-
       <form
         id="add-new-ingredient-to-grocery-list"
         v-on:submit.prevent="createGroceryItem()"
       >
-        <input type="text" v-model="newItem" placeholder="Add new ingredient" />
+        <input
+          type="text"
+          v-model="newItem"
+          placeholder="Add grocery list item"
+        />
         <button type="submit" class="btn-save dark-green-btns">Save</button>
       </form>
     </div>
@@ -34,20 +36,21 @@
           v-for="item in filteredItems"
           v-bind:key="item.name"
           v-bind:class="item.done ? 'checked' : 'unchecked'"
-        ><td class="grocery-item-cells">
-          <input
-            type="checkbox"
-            v-model="item.done"
-            @change="moveItem(item)"
-          />
-          
-          <label>
-            {{ item.name }}
+        >
+          <td class="grocery-item-cells">
+            <input
+              type="checkbox"
+              v-model="item.done"
+              @change="moveItem(item)"
+            />
 
-            <span id="delete" v-on:click="deleteGroceryItem(item)">
-              ×</span
-            ></label
-          >
+            <label>
+              {{ item.name }}
+
+              <span id="delete" v-on:click="deleteGroceryItem(item)">
+                ×</span
+              ></label
+            >
           </td>
         </tr>
       </table>
@@ -107,7 +110,6 @@ export default {
 
 <style scoped>
 .btn-save {
-  background-color: #1a4314;
   width: 100px;
   height: 30px;
   padding: 0;
@@ -124,8 +126,8 @@ export default {
   background-color: #94c973;
   border-radius: 25px;
   width: 500px;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 0px;
   padding: 5px;
 }

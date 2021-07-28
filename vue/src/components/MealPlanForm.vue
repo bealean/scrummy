@@ -20,12 +20,16 @@
           />
         </div>
       </div>
-      <button class="meal-plan-btns dark-green-btns" type="submit" value="Submit">
+      <button
+        class="meal-plan-btns dark-green-btns"
+        type="submit"
+        value="Submit"
+      >
         Submit
       </button>
       <button
         class="meal-plan-btns dark-green-btns"
-        v-on:click.prevent="cancelAddRecipe()"
+        v-on:click.prevent="cancelAddMealPlan()"
         type="cancel"
       >
         Go Back to Meal Plans
@@ -83,27 +87,39 @@ export default {
         dailyPlanList: [],
       };
 
-      mealPlanService.newMealPlan(createdMealPlan).then((response) => {
-        if (response.status === 201) {
-          mealPlanService
-            .getMealPlanByName(this.newMealPlan.mealPlanName)
-            .then((response) => {
-              this.newMealPlan = response.data;
-              this.$router.push(
-                `/mealPlanDetails/${this.newMealPlan.mealPlanId}`
-              );
-            });
-        }
-      });
+      mealPlanService
+        .newMealPlan(createdMealPlan)
+        .then((response) => {
+          if (response.status === 201) {
+            mealPlanService
+              .getMealPlanByName(this.newMealPlan.mealPlanName)
+              .then((response) => {
+                this.newMealPlan = response.data;
+                this.$router.push(
+                  `/meal-plan-details/${this.newMealPlan.mealPlanId}`
+                );
+              });
+          }
+        })
+        .catch((error) => {
+          alert("There was a problem adding the meal plan. Please retry.");
+          console.error("Problem adding meal plan:" + error);
+        });
     },
-    cancelAddRecipe() {
-      this.$router.push("/myMealPlans");
+    cancelAddMealPlan() {
+      this.$router.push("/my-meal-plans");
     },
   },
   created() {
-    recipeService.getAllRecipes().then((response) => {
-      this.myRecipes = response.data;
-    });
+    recipeService
+      .getAllRecipes()
+      .then((response) => {
+        this.myRecipes = response.data;
+      })
+      .catch((error) => {
+        alert("There was a problem retrieving recipes.");
+        console.error("Problem retrieving recipes:" + error);
+      });
   },
 };
 </script>

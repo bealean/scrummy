@@ -2,18 +2,22 @@
   <div>
     <h1>My Meal Plans</h1>
     <div>
-      <button @click="$router.push('createMealPlan')">
+      <button @click="$router.push('create-meal-plan')">
         Create Meal Plan
       </button>
     </div>
 
     <div>
-      <table id="my-meal-plans-table" class="table-numbered-rows" v-show="mealPlanList.length > 0">
+      <table
+        id="my-meal-plans-table"
+        class="table-numbered-rows"
+        v-show="mealPlanList.length > 0"
+      >
         <tr v-for="mealPlan in mealPlanList" v-bind:key="mealPlan.mealPlanId">
           <td class="row-number-cell" id="meal-plan-number-cell">
             {{ mealPlan.place }}
           </td>
-          <td id="meal-plan-link-cell" class="link-cell"> 
+          <td id="meal-plan-link-cell" class="link-cell">
             <router-link
               class="link"
               id="meal-plan-link"
@@ -24,8 +28,8 @@
             >
               {{ mealPlan.mealPlanName }}
             </router-link>
-            </td>
-            <td id="delete-btn-cell">
+          </td>
+          <td id="delete-btn-cell">
             <button
               class="delete-btn dark-green-btns"
               v-on:click.prevent="deleteMealPlan(mealPlan.mealPlanId)"
@@ -67,14 +71,12 @@ export default {
       for (let i = 0; i < this.mealPlanList.length; i++) {
         this.mealPlanList[i].place = i + 1;
       }
-      console.log(this.mealPlanList);
     });
   },
 };
 </script>
 
 <style scoped>
-
 td {
   background-color: rgba(255, 253, 253, 0.472);
   border-width: 2px;
@@ -89,13 +91,13 @@ td {
 }
 
 #meal-plan-link-cell {
-    padding-left: 80px;
-    padding-right: 80px;
+  padding-left: 80px;
+  padding-right: 80px;
 }
 
 #meal-plan-number-cell {
-    padding-left: 10px;
-    padding-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #delete-btn-cell {

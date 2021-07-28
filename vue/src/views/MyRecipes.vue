@@ -1,15 +1,15 @@
 <template>
   <div>
     <h1>My Recipes</h1>
-    <my-recipes-list />
+    <my-recipes />
   </div>
 </template>
 
 <script>
-import MyRecipesList from "../components/MyRecipesList.vue";
+import MyRecipes from "../components/MyRecipes.vue";
 
 export default {
-  components: { MyRecipesList },
+  components: { MyRecipes },
   created() {
     this.$store.commit("SET_IS_LOADING", true);
   },
