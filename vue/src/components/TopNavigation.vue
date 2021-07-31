@@ -4,7 +4,7 @@
       <router-link class="link" v-bind:to="{ name: 'home' }">Home</router-link>
       <span v-if="$store.state.token != ''"> &nbsp;|&nbsp; </span>
     </span>
-    <span v-if="$store.state.token != ''">
+    <span v-if="$store.state.token != '' && this.$route.path != '/login'">
       <router-link class="link" v-bind:to="{ name: 'logout' }"
         >Logout</router-link
       >

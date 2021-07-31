@@ -147,8 +147,13 @@ export default {
             }
           })
           .catch((error) => {
-            alert("There was a problem adding the recipe. Please retry.");
-            console.error("Problem adding recipe." + error);
+            if (error.response.status === 401) {
+              alert("Session expired. Please sign in again.");
+              this.$router.push("/login");
+            } else {
+              alert("There was a problem adding the recipe. Please retry.");
+              console.error("Problem adding recipe." + error);
+            }
           });
       } else {
         recipeService

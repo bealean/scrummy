@@ -144,8 +144,14 @@ export default {
             this.$router.push("/my-recipes");
           }
         })
-        .catch((err) => {
-          console.error(err + " problem adding recipe.");
+        .catch((error) => {
+          if (error.response.status === 401) {
+            alert("Session Expired. Please sign in again.");
+            this.$router.push("/login");
+          } else {
+              alert("Problem adding recipe.");
+              console.error("Problem adding recipe: " + error);
+          }
         });
     },
     add() {

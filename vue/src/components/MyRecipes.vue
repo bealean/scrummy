@@ -42,6 +42,15 @@ export default {
       for (let i = 0; i < this.recipeList.length; i++) {
         this.recipeList[i].place = i + 1;
       }
+    }).catch((error) => {
+      if (error.response.status === 401) {
+        alert("Session expired. Please sign in again.");
+        this.$router.push("/login");
+      } else {
+        alert("Error retrieving recipe list.");
+        console.log("Error retrieving recipe list: " + error);
+      }
+
     });
   },
 };

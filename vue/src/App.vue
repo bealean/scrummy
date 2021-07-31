@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
     <loading-overlay v-if="$store.state.isLoading" />
     <div id="loaded-div">
       <top-navigation />

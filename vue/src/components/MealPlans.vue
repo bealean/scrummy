@@ -71,6 +71,14 @@ export default {
       for (let i = 0; i < this.mealPlanList.length; i++) {
         this.mealPlanList[i].place = i + 1;
       }
+    }).catch((error)=> {
+      if (error.response.status === 401) {
+        alert("Session expired. Please sign in again.");
+        this.$router.push("/login");
+      } else {
+        alert("Problem loading meal plans.");
+        console.log("Problem loading meal plans: " + error);
+      }
     });
   },
 };

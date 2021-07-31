@@ -31,14 +31,22 @@
 </template>
 
 <script>
+import recipeService from "../services/RecipeService.js";
 export default {
   name: "home",
+  created() {
+      recipeService.getAllRecipes().then(() => {
+    }).catch((error) => {
+      if (error.response.status === 401) {
+        this.$store.commit("SET_AUTH_TOKEN", "");
+        this.$router.push("/login");
+      } 
+    });
+  }
 };
+
 </script>
 <style scoped>
-header {
-  text-align: center;
-}
 
 h2 {
   background-color: rgba(255, 253, 253, 0.85);
