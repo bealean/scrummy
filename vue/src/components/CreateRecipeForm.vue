@@ -35,43 +35,42 @@
         <br />
         <label for="ingredients">Ingredients</label>
         <table>
-        <tr
-          id="ingredients"
-          class="ingredients-list-boxes"
-          v-for="(input, k) in inputs"
-          :key="k"
-        >
-          <input
-            type="text"
-            placeholder="quantity"
-            class="form-control"
-            v-model="input.measurementQuantity"
-          />
-          <input
-            type="text"
-            placeholder="measurement type"
-            v-model="input.measurementType"
-          />
-          <input
-            type="text"
-            placeholder="ingredient"
-            v-model="input.ingredientName"
-          />
+          <tr
+            id="ingredients"
+            class="ingredients-list-boxes"
+            v-for="(input, k) in inputs"
+            :key="k"
+          >
+            <input
+              type="text"
+              placeholder="quantity"
+              class="form-control"
+              v-model="input.measurementQuantity"
+            />
+            <input
+              type="text"
+              placeholder="measurement type"
+              v-model="input.measurementType"
+            />
+            <input
+              type="text"
+              placeholder="ingredient"
+              v-model="input.ingredientName"
+            />
 
-          <span>
-            <i
-              class="fas fa-minus-circle"
-              @click="remove(k)"
-              v-show="k || (!k && inputs.length > 1)"
-            ></i>
-            <i
-              class="fas fa-plus-circle"
-              @click="add(k)"
-              v-show="k == inputs.length - 1"
-            ></i>
-          </span>
-          
-        </tr>
+            <span>
+              <i
+                class="fas fa-minus-circle"
+                @click="remove(k)"
+                v-show="k || (!k && inputs.length > 1)"
+              ></i>
+              <i
+                class="fas fa-plus-circle"
+                @click="add(k)"
+                v-show="k == inputs.length - 1"
+              ></i>
+            </span>
+          </tr>
         </table>
         <br />
         <label for="directions">Directions</label>
@@ -87,7 +86,9 @@
         </div>
       </div>
       <br />
-      <button class="submit-btn dark-green-btns" type="submit" value="Submit">Submit</button>
+      <button class="submit-btn dark-green-btns" type="submit" value="Submit">
+        Submit
+      </button>
       <button
         class="submit-btn dark-green-btns"
         v-on:click.prevent="cancelNewRecipe"
@@ -149,8 +150,8 @@ export default {
             alert("Session Expired. Please sign in again.");
             this.$router.push("/login");
           } else {
-              alert("Problem adding recipe.");
-              console.error("Problem adding recipe: " + error);
+            alert("Problem adding recipe.");
+            console.error("Problem adding recipe: " + error);
           }
         });
     },
@@ -168,6 +169,18 @@ export default {
     cancelNewRecipe() {
       this.$router.push("/my-recipes");
     },
+  },
+  created() {
+    //Check for Session Expired befor user enters recipe details
+    recipeService
+      .getAllRecipes()
+      .then(() => {})
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert("Session Expired. Please sign in again.");
+          this.$router.push("/login");
+        }
+      });
   },
 };
 </script>

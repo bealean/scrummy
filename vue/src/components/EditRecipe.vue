@@ -95,7 +95,7 @@
           Save to My Recipes
         </button>
       </span>
-      <button class="dark-green-btns" @click="$router.go(-1)" type="cancel">
+      <button class="dark-green-btns" v-on:click="goBack" type="cancel">
         Cancel
       </button>
     </form>
@@ -182,6 +182,9 @@ export default {
     remove(index) {
       this.inputs.splice(index, 1);
     },
+    goBack() {
+      this.$router.push(this.$store.state.prevRoute);
+    }
   },
   created() {
     if (
@@ -192,6 +195,17 @@ export default {
       this.$router.push("/");
     } else {
       this.$store.commit("SET_IS_LOADING", true);
+      //Check for Session Expired befor user makes edits
+      recipeService
+        .getAllRecipes()
+        .then(() => {})
+        .catch((error) => {
+          if (error.response.status === 401) {
+            this.$store.commit("SET_IS_LOADING", false);
+            alert("Session Expired. Please sign in again.");
+            this.$router.push("/login");
+          }
+        });
       this.recipe = this.$store.state.recipe;
       this.$store.commit("SET_RECIPE", {});
       this.inputs = this.recipe.recipeIngredients;

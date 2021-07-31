@@ -59,7 +59,7 @@
           Delete Recipe
         </button>
       </span>
-      <button class="dark-green-btns" @click="$router.go(-1)">Back</button>
+      <button class="dark-green-btns" v-on:click="goBack">Back</button>
     </div>
   </div>
 </template>
@@ -101,6 +101,15 @@ export default {
         name: "editRecipe",
         params: { id: this.recipe.id, newOrExisting: this.newOrExisting },
       });
+    },
+    /* Back button goes to previous screen, except for the case
+     where the user got to Recipe Details by cancelling Edit Recipe */
+    goBack() {
+      if (this.$route.params.newOrExisting === "new") {
+        this.$router.push({name: "searchRecipes"});
+      } else {
+        this.$router.push({name: "myRecipes"});
+      }
     },
   },
   created() {
