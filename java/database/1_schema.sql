@@ -41,7 +41,7 @@ CREATE TABLE recipes (
 CREATE TABLE meal_plan (
         meal_plan_id serial NOT NULL,
         user_id int NOT NULL,
-        mp_name varchar(80),
+        mp_name varchar(50),
 	CONSTRAINT PK_meal_plan_id PRIMARY KEY (meal_plan_id),
 	CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users (user_id)
 );

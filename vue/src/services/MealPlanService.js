@@ -13,8 +13,8 @@ export default {
     getIngredientsByMealPlanId(mealPlanId) {
         return axios.get(`/grocery-list/${mealPlanId}`);
     },
-    newMealPlan(mealPlan) {
-        return axios.post('/add-new-meal-plan', mealPlan);
+    newMealPlan(mealPlanName) {
+        return axios.post(`/add-new-meal-plan?mealPlanName=${mealPlanName}`);
     },
     updateMealPlan(mealPlanId, mealPlan) {
         return axios.put(`/update-meal-plan/${mealPlanId}`, mealPlan);

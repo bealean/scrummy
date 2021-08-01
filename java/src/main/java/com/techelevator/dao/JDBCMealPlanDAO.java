@@ -2,9 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exceptions.MealPlanNotFoundException;
 import com.techelevator.exceptions.RecipeNotFoundException;
-import com.techelevator.model.DailyPlan;
-import com.techelevator.model.GroceryListItem;
-import com.techelevator.model.MealPlan;
+import com.techelevator.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -75,12 +73,25 @@ public class JDBCMealPlanDAO implements MealPlanDAO {
     }
 
     @Override
-    public Long addMealPlan(MealPlan mealPlan) {
+    public Long addMealPlan(String mealPlanName, long userId) {
         String sql = "INSERT INTO meal_plan(user_id, mp_name) VALUES(?, ?)";
-        jdbcTemplate.update(sql, mealPlan.getUserId(), mealPlan.getMealPlanName());
+        jdbcTemplate.update(sql, userId, mealPlanName);
         String sqlSelect = "SELECT meal_plan_id FROM meal_plan WHERE user_id = ? AND mp_name = ?";
-        return jdbcTemplate.queryForObject(sqlSelect, Long.class, mealPlan.getUserId(),
-                mealPlan.getMealPlanName());
+        Long mealPlanId = jdbcTemplate.queryForObject(sqlSelect, Long.class, userId,
+                mealPlanName);
+        String[] weekdays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        String[] mealTypes = {"Breakfast", "Snack", "Lunch", "Snack", "Dinner", "Dessert"};
+        List<Meal> meals = new ArrayList<>();
+        List<Recipe> recipes = new ArrayList<>();
+        for (String mealType : mealTypes) {
+            Meal meal = new Meal(0, 0, mealType, recipes);
+            meals.add(meal);
+        }
+        for (String weekday : weekdays) {
+            DailyPlan dailyPlan = new DailyPlan(0, weekday, meals, mealPlanId);
+            dailyPlanDAO.addDailyPlanToMealPlan(dailyPlan);
+        }
+        return mealPlanId;
     }
 
     @Override

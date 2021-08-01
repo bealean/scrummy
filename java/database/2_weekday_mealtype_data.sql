@@ -6,7 +6,7 @@ INSERT INTO meal_type (meal_type) VALUES ('Lunch');
 
 INSERT INTO meal_type (meal_type) VALUES ('Dinner');
 
-INSERT INTO meal_type (meal_type) VALUES ('Snacks');
+INSERT INTO meal_type (meal_type) VALUES ('Snack');
 
 INSERT INTO meal_type (meal_type) VALUES ('Dessert');
 

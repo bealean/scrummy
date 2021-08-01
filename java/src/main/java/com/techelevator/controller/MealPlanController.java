@@ -60,21 +60,12 @@ public class MealPlanController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/add-new-meal-plan", method = RequestMethod.POST)
-    public void addNewMealPlan(@Valid @RequestBody MealPlan mealPlan) {
-        Long mealPlanId = mealPlanDAO.addMealPlan(mealPlan);
-        String[] weekdays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        String[] mealTypes = {"Breakfast", "Lunch", "Dinner", "Dessert"};
-        List<Meal> meals = new ArrayList<>();
-        List<Recipe> recipes = new ArrayList<>();
-        for (String mealType : mealTypes) {
-            Meal meal = new Meal(0, 0, mealType, recipes);
-            meals.add(meal);
-        }
-        for (String weekday : weekdays) {
-            DailyPlan dailyPlan = new DailyPlan(0, weekday, meals, mealPlanId);
-            dailyPlanDAO.addDailyPlanToMealPlan(dailyPlan);
-        }
+    public Long addNewMealPlan(@RequestParam String mealPlanName, Principal principal) {
+        String username = principal.getName();
+        long userId = userDAO.findIdByUsername(username);
+        Long mealPlanId = mealPlanDAO.addMealPlan(mealPlanName, userId);
         logTimestamp("Adding new meal plan");
+        return mealPlanId;
     }
 
     @RequestMapping(path = "/update-meal-plan/{mealPlanId}", method = RequestMethod.PUT)

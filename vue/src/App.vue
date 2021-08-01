@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+    
     <loading-overlay v-if="$store.state.isLoading" />
     <div id="loaded-div">
       <top-navigation />
@@ -33,7 +33,7 @@ html {
   background-size: cover;
   background-color: rgba(255, 253, 253, 0.85);
   font-family: monospace;
-  font-size: 12pt;
+  font-size: 14pt;
   text-align: center;
   height: 100%;
 }
@@ -53,14 +53,14 @@ button {
   box-sizing: border-box;
   text-decoration: none;
   font-family: monospace;
-  font-size: 14pt;
+  font-size: 1rem;
   font-weight:600;
   color: #264653;
   background-color: #94c973;
   text-align: center;
   transition: all 0.2s;
-  width: 300px;
-  height: 50px;
+  width: 15rem;
+  height: 2.5rem;
   cursor: pointer;
 }
 

@@ -17,7 +17,7 @@ public interface MealPlanDAO {
 
     List<GroceryListItem> getIngredientsByMealPlanId(long mealPlanId);
 
-    Long addMealPlan(MealPlan mealPlan);
+    Long addMealPlan(String mealPlanName, long userId);
 
     void updateMealPlan(MealPlan mealPlan);
 
