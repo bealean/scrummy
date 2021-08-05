@@ -1,14 +1,15 @@
 <template>
   <div>
-    <edit-recipe />
+  <h1>Edit Recipe</h1>
+    <recipe-form />
   </div>
 </template>
 
 <script>
-import EditRecipe from "../components/EditRecipe.vue";
+import RecipeForm from "../components/RecipeForm.vue";
 
 export default {
-  components: { EditRecipe },
+  components: { RecipeForm },
 };
 </script>
 

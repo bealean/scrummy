@@ -49,7 +49,7 @@
               class="link"
               v-bind:to="{
                 name: 'recipeDetails',
-                params: { id: recipe.id, newOrExisting: 'new' },
+                params: { id: recipe.id },
               }"
               >{{ recipe.title }}</router-link
             >

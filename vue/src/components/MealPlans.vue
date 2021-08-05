@@ -2,7 +2,7 @@
   <div>
     <h1>My Meal Plans</h1>
     <div>
-      <button @click="$router.push('create-meal-plan')">
+      <button class="large-button" @click="$router.push('create-meal-plan')">
         Create Meal Plan
       </button>
     </div>
@@ -20,7 +20,7 @@
           <td id="meal-plan-link-cell" class="link-cell">
             <router-link
               class="link"
-              id="meal-plan-link"
+              
               v-bind:to="{
                 name: 'mealPlanDetails',
                 params: { mealPlanId: mealPlan.mealPlanId },
@@ -88,14 +88,6 @@ export default {
 td {
   background-color: rgba(255, 253, 253, 0.472);
   border-width: 2px;
-}
-
-#meal-plan-link {
-  color: #1323a9;
-}
-
-#meal-plan-link:hover {
-  color: #0000ff;
 }
 
 #meal-plan-link-cell {

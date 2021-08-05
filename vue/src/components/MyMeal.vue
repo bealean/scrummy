@@ -1,13 +1,10 @@
 <template>
   <div>
-    <h1 id="recipe-header">
-      Meal Plan:
-      {{ meal.mealType }}
-    </h1>
+    <h1>Meal: {{ dailyPlan.weekday }} {{ meal.mealType }}</h1>
     <div>
-      <form v-on:submit.prevent="addRecipeToMeal()">
-        <h2><label>Select Recipe</label></h2>
-        <div class="custom-select">
+      <form id="select-recipe-form" v-on:submit.prevent="addRecipeToMeal()">
+        <h2>Select Recipe</h2>
+        <div class="custom-select-div">
           <select class="select" v-model="selectedRecipe">
             <option
               v-for="recipe in myRecipes"
@@ -17,13 +14,12 @@
               {{ recipe.name }}
             </option>
           </select>
-          <br />
         </div>
-        <button class="submit-btn dark-green-btns" type="submit" value="Submit">
+        <button class="dark-green-btns" type="submit" value="Submit">
           Save
         </button>
         <button
-          class="submit-btn dark-green-btns"
+          class="dark-green-btns"
           v-on:click.prevent="returnToMealPlanDetails()"
           type="cancel"
         >
@@ -32,9 +28,9 @@
       </form>
     </div>
     <div v-if="meal.recipes">
-      <div class="meal-plan-items-list" v-show="meal.recipes.length > 0">
+      <div class="meal-recipes-list-div" v-show="meal.recipes.length > 0">
         <ul
-          class="meal-plan-list"
+          class="meal-recipes-list"
           v-for="recipe in meal.recipes"
           v-bind:key="recipe.recipeId"
         >
@@ -48,6 +44,7 @@
 <script>
 import mealService from "../services/MealService.js";
 import recipeService from "../services/RecipeService.js";
+import dailyPlanService from "../services/DailyPlanService.js";
 export default {
   data() {
     return {
@@ -56,47 +53,71 @@ export default {
       },
       myRecipes: {},
       meal: {},
-      user: {
-        userName: this.$store.state.user.username,
-        id: this.$store.state.user.id,
-      },
+      dailyPlan: {},
     };
   },
   methods: {
     addRecipeToMeal() {
-      recipeService
-        .addRecipeToMeal(this.meal.mealId, this.selectedRecipe.id)
-        .then((response) => {
-          if (response.status === 201) {
-            alert(`Recipe added to ${this.meal.mealType}!`);
-            this.$router.go();
-          }
-        })
-        .catch((error) => {
-          alert("There was a problem adding the recipe. Please retry.");
-          console.error(error + " problem adding recipe.");
-        });
+      if (this.selectedRecipe.id !== "") {
+        this.$store.commit("SET_IS_LOADING", true);
+        recipeService
+          .addRecipeToMeal(this.meal.mealId, this.selectedRecipe.id)
+          .then((response) => {
+            if (response.status === 201) {
+              this.$router.go();
+            } else {
+              this.$store.commit("SET_IS_LOADING", false);
+              alert("There was a problem adding the recipe.");
+              console.error(
+                "Problem adding recipe. Response status: " + response.statusText
+              );
+            }
+          })
+          .catch((error) => {
+            this.$store.commit("SET_IS_LOADING", false);
+            alert("There was a problem adding the recipe.");
+            console.error(error + " problem adding recipe.");
+          });
+      } else {
+        alert("Please select a recipe!");
+      }
     },
     returnToMealPlanDetails() {
       this.$router.push(`/meal-plan-details/${this.$route.params.mealPlanId}`);
     },
   },
   created() {
+    this.$store.commit("SET_IS_LOADING", true);
     mealService
       .getMealById(this.$route.params.mealId)
       .then((response) => {
         this.meal = response.data;
+        dailyPlanService
+          .getDailyPlanById(this.meal.dailyPlanId)
+          .then((response) => {
+            this.dailyPlan = response.data;
+            Promise.all([request2]).then(() => {
+              this.$store.commit("SET_IS_LOADING", false);
+            });
+          })
+          .catch((error) => {
+            this.$store.commit("SET_IS_LOADING", false);
+            alert("There was a problem retrieving the daily plan.");
+            console.error("Problem retrieving the daily plan: " + error);
+          });
       })
       .catch((error) => {
+        this.$store.commit("SET_IS_LOADING", false);
         alert("There was a problem retrieving the meal.");
         console.error("Problem retrieving the meal: " + error);
       });
-    recipeService
+    let request2 = recipeService
       .getAllRecipes()
       .then((response) => {
         this.myRecipes = response.data;
       })
       .catch((error) => {
+        this.$store.commit("SET_IS_LOADING", false);
         alert("There was a problem retrieving the recipe list.");
         console.error("Problem retrieving the recipe list: " + error);
       });
@@ -105,35 +126,16 @@ export default {
 </script>
 
 <style scoped>
-.submit-btn {
-  background-color: #1a4314;
-  width: 100px;
-  height: 25px;
-  padding: 0px;
-  margin: 15px;
+#select-recipe-form {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  margin-top: 5px;
+  width: 50%;
 }
 
-.custom-select {
-  position: relative;
-}
-
-.meal-plan-items-list {
-  background: #94c973;
-  margin: auto;
-  width: 90%;
-  max-width: 1080px;
-  text-align: center;
-  padding: 15px;
-  border-radius: 25px;
-  font-size: 14pt;
-}
-
-.meal-plan-list {
-  list-style: none;
-}
-
-#recipe-header {
-  font-size: 36pt;
+.custom-select-div {
+  margin-top: 10px;
+  margin-bottom: 40px;
 }
 
 .select {
@@ -141,7 +143,19 @@ export default {
   font-size: 16px;
 }
 
-label {
-  font-size: 20pt;
+.meal-recipes-list-div {
+  background: #94c973;
+  margin: auto;
+  width: 90%;
+  max-width: 1080px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 16pt;
+  color: #1a4314;
+}
+
+.meal-recipes-list {
+  list-style: none;
 }
 </style>

@@ -7,33 +7,38 @@
       />
     </head>
 
-    <form id="edit-form" v-on:submit.prevent="editRecipe()">
-      <span v-if="!isNewRecipe">
-        <h1>Edit Recipe</h1>
-      </span>
-      <span v-if="isNewRecipe">
-        <h1>Edit/Save Recipe</h1>
-      </span>
-      <div>
-        <label for="name">Name </label>
+    <form id="recipe-form" v-on:submit.prevent="submitRecipe()">
+      <div id="div-for-recipe-form-fields">
+        <div class="form-label">
+          <label for="name">Name</label>
+        </div>
         <div>
-          <br />
           <input
             id="name"
             type="text"
             v-model="recipe.name"
             minlength="1"
-            maxlength="500"
-            size="75"
+            maxlength="200"
+            size="60%"
           />
         </div>
-        <div><br /><label for="servings">Servings </label></div>
-        <div>
-          <br />
-          <input type="text" id="servings" v-model="recipe.numberOfServings" />
+
+        <div class="form-label">
+          <label for="servings">Servings</label>
         </div>
-        <br />
-        <label for="ingredients">Ingredients</label>
+        <div>
+          <input
+            type="number"
+            step="any"
+            min="0"
+            max="1000000000"
+            id="servings"
+            v-model="recipe.numberOfServings"
+          />
+        </div>
+        <div class="form-label" id="label-for-ingredients">
+          <label for="ingredients">Ingredients</label>
+        </div>
         <table>
           <tr
             class="ingredients-list-boxes"
@@ -43,21 +48,27 @@
             <!--Looping starts for ingredients:-->
             <input
               v-model="input.measurementQuantity"
-              type="text"
+              type="number"
+              step="any"
+              min="0"
+              max="1000000000"
               placeholder="quantity"
+              size="20%"
             />
             <input
               v-model="input.measurementType"
               type="text"
+              maxlength="60"
               placeholder="measurement type"
+              size="20%"
             />
             <input
               v-model="input.ingredientName"
               placeholder="ingredient"
               type="text"
               minlength="1"
-              maxlength="500"
-              size="50"
+              maxlength="300"
+              size="40%"
             />
             <span>
               <i
@@ -73,18 +84,20 @@
             </span>
           </tr>
         </table>
-        <br />
-        <label for="directions">Directions</label>
+        <div class="form-label" id="label-for-directions">
+          <label for="directions">Directions</label>
+        </div>
         <div style="margin-top: 10px">
           <textarea
+            id="directions"
             rows="20"
             cols="200"
-            style="width: 500px"
+            maxlength="10000"
+
             v-model="recipe.directions"
           />
         </div>
       </div>
-      <br />
       <span v-if="!isNewRecipe">
         <button class="dark-green-btns" type="submit" value="Submit">
           Save
@@ -113,7 +126,13 @@ export default {
         recipeId: "",
         name: "",
         directions: "",
-        recipeIngredients: [],
+        recipeIngredients: [
+          {
+            measurementQuantity: "",
+            measurementType: "",
+            ingredientName: "",
+          },
+        ],
         numberOfServings: "",
       },
       inputs: [
@@ -128,7 +147,7 @@ export default {
     };
   },
   methods: {
-    editRecipe() {
+    submitRecipe() {
       const editedRecipe = {
         recipeId: this.recipe.recipeId,
         userId: this.$store.state.user.id,
@@ -184,18 +203,20 @@ export default {
     },
     goBack() {
       this.$router.push(this.$store.state.prevRoute);
-    }
+    },
   },
   created() {
     if (
-      this.$store.state.prevRoute !=
-      `/recipe-details/${this.$route.params.id}/${this.$route.params.newOrExisting}`
+      this.$route.params.id &&
+      !this.$store.state.prevRoute.endsWith(
+        `recipe-details/${this.$route.params.id}`
+      )
     ) {
       alert("Edit Recipe must be opened from Recipe Details.");
       this.$router.push("/");
     } else {
       this.$store.commit("SET_IS_LOADING", true);
-      //Check for Session Expired befor user makes edits
+      //Check for Session Expired before user makes edits
       recipeService
         .getAllRecipes()
         .then(() => {})
@@ -206,15 +227,24 @@ export default {
             this.$router.push("/login");
           }
         });
-      this.recipe = this.$store.state.recipe;
-      this.$store.commit("SET_RECIPE", {});
-      this.inputs = this.recipe.recipeIngredients;
-      if (this.$route.params.newOrExisting === "new") {
+      if (this.$route.path != "/create-recipe") {
+        this.recipe = this.$store.state.recipe;
+        this.$store.commit("SET_RECIPE", {});
+        if (
+          this.recipe.recipeIngredients &&
+          this.recipe.recipeIngredients.length > 0
+        ) {
+          this.inputs = this.recipe.recipeIngredients;
+        }
+      }
+
+      if (!this.$route.path.startsWith("/edit-recipe")) {
         this.isNewRecipe = true;
-        this.recipe.directions = this.recipe.directions.replace(
-          /<\/?[^>]+>/gi,
-          ""
-        );
+        if (this.$route.path.startsWith("/save-recipe"))
+          this.recipe.directions = this.recipe.directions.replace(
+            /<\/?[^>]+>/gi,
+            ""
+          );
       }
     }
   },
@@ -225,13 +255,16 @@ export default {
 </script>
 
 <style scoped>
-#edit-form {
-  background: #94c973;
-  margin: 4em auto;
-  width: 90%;
-  max-width: 1080px;
-  text-align: center;
-  padding: 5px;
+#recipe-form {
+  margin-top: 5px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1000px;
+  padding-top: 5px;
+}
+
+#div-for-recipe-form-fields {
+    margin-bottom: 30px;
 }
 
 tr {
@@ -242,5 +275,18 @@ table {
   margin-bottom: 0px;
   padding: 0px;
   border-spacing: 1px;
+}
+
+.form-label {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#label-for-ingredients {
+    padding-bottom: 5px;
+}
+
+#label-for-directions {
+    padding-bottom: 10px;
 }
 </style>

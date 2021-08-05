@@ -1,28 +1,27 @@
 <template>
-  <div class="home">
-    <br />
-    <h1 class="home-header">Scrummy Meal Planner</h1>
-    <br />
-    <h2>Welcome, {{ $store.state.user.username }}!</h2>
-    <br /><br />
-    <div class="home-btn-container">
+  <div id="home-main-div">
+    <h1 id="home-header">Scrummy Meal Planner</h1>
+
+    <h2 class="transparent-background-on-image">Welcome, {{ $store.state.user.username }}!</h2>
+
+    <div id="home-btn-container">
       <div>
-        <button class="home-btns" @click="$router.push('search-recipes')">
+        <button class="home-btns large-button" @click="$router.push('search-recipes')">
           Search Recipes
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('create-recipe')">
+        <button class="home-btns large-button" @click="$router.push('create-recipe')">
           Create Recipe
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('my-recipes')">
+        <button class="home-btns large-button" @click="$router.push('my-recipes')">
           My Recipes
         </button>
       </div>
       <div>
-        <button class="home-btns" @click="$router.push('my-meal-plans')">
+        <button class="home-btns large-button" @click="$router.push('my-meal-plans')">
           My Meal Plans
         </button>
       </div>
@@ -48,21 +47,15 @@ export default {
 </script>
 <style scoped>
 
-h2 {
-  background-color: rgba(255, 253, 253, 0.85);
-  color: #264653;
-  width: 40%;
-  border-radius: 25px;
-  display: inline-block;
-  font-size: 26px;
-  margin-bottom: 0px;
+#home-main-div {
+  margin-top: 30px;
 }
 
-.home-btn-container {
-  margin: 50px 0px 0px 0px;
+#home-btn-container {
+  margin: 50px 0px 50px 0px;
 }
 
-.home-header {
+#home-header {
   font-size: 36pt;
   color: #e76f51;
   background-color: #264653;

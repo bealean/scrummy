@@ -36,7 +36,9 @@ public class JDBCDailyPlanDAO implements DailyPlanDAO {
 
     @Override
     public DailyPlan getDailyPlanByDailyPlanId(long dpId) throws RecipeNotFoundException, DailyPlanNotFoundException {
-        String sql = "SELECT * FROM daily_plan WHERE dp_id = ?";
+        String sql = "SELECT dp.dp_id, dp.meal_plan_id, w.weekday FROM daily_plan dp " +
+                "JOIN weekday w ON dp.weekday_id = w.weekday_id " +
+                "WHERE dp.dp_id = ?";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, dpId);
 
         if (result.next()) {

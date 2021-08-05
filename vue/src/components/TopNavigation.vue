@@ -1,5 +1,5 @@
 <template>
-  <nav id="nav">
+  <nav id="nav" class="transparent-background-on-image">
     <span v-if="this.$route.path != '/login' && this.$route.path != '/'">
       <router-link class="link" v-bind:to="{ name: 'home' }">Home</router-link>
       <span v-if="$store.state.token != ''"> &nbsp;|&nbsp; </span>
@@ -23,13 +23,14 @@ export default {};
 
 <style>
 #nav {
-  font-size: 17pt;
-  background-color: rgba(255, 253, 253, 0.85);
+  font-size: 24px;
   border-radius: 25px;
   width: 80%;
+    min-width: fit-content;
   margin-left: auto;
   margin-right: auto;
   margin-top: 15px;
   margin-bottom: 10px;
+
 }
 </style>

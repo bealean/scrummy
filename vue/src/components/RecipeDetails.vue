@@ -1,57 +1,48 @@
 <template>
-  <div class="my-recipe-details">
+  <div id="recipe-details-div">
     <div v-if="!recipe.name">
       <h1>Recipe Details</h1>
     </div>
     <div v-if="recipe.name">
-      <table>
-        <th id="recipe-header">
-          {{ recipe.name }}
-        </th>
-        <div>&nbsp;</div>
-        <tr id="servings-data">
-          {{
-            recipe.numberOfServings
-          }}
-          Servings
-        </tr>
-
-        <th id="ingredients-header">Ingredients</th>
+      <h1>{{ recipe.name }}</h1>
+      <div id="servings-div">{{ recipe.numberOfServings }} Servings</div>
+      <h2>Ingredients</h2>
+      <table id="recipe-ingredients-table">
         <tr
           id="ingredients-data"
           v-for="ingredient in recipe.recipeIngredients"
           v-bind:key="ingredient.id"
         >
-          {{
-            ingredient.measurementQuantity
-          }}
-          {{
-            ingredient.measurementType
-          }}
-          {{
-            ingredient.ingredientName
-          }}
-        </tr>
-
-        <th id="directions-header">Directions</th>
-        <tr id="directions-data">
-          {{
-            recipe.directions
-          }}
+          <td>
+            {{ ingredient.measurementQuantity }}
+            {{ ingredient.measurementType }}
+            {{ ingredient.ingredientName }}
+          </td>
         </tr>
       </table>
-      <br />
-      <span v-if="$store.state.token != '' && newOrExisting === 'new'">
+      <h2>Directions</h2>
+      <div id="directions-div">{{ recipe.directions }}</div>
+
+      <span
+        v-if="
+          $store.state.token != '' && $route.path.startsWith('/recipe-details')
+        "
+      >
         <button class="dark-green-btns" v-on:click.prevent="editRecipe()">
-          Edit/Save Recipe
+          Save Recipe
         </button>
       </span>
-      <span v-if="$store.state.token != '' && newOrExisting === 'existing'">
+      <span
+        v-if="
+          $store.state.token != '' &&
+          $route.path.startsWith('/my-recipe-details')
+        "
+      >
         <button class="dark-green-btns" v-on:click.prevent="editRecipe()">
           Edit Recipe
         </button>
       </span>
-      <span v-if="newOrExisting === 'existing'">
+      <span v-if="$route.path.startsWith('/my-recipe-details')">
         <button
           class="dark-green-btns"
           v-on:click.prevent="deleteRecipe(recipe.recipeId)"
@@ -71,8 +62,6 @@ import spoonacularService from "../services/SpoonacularService.js";
 export default {
   data() {
     return {
-      newOrExisting: "",
-      prevRoute: null,
       recipe: {},
       user: {
         userName: this.$store.state.user.username,
@@ -97,25 +86,33 @@ export default {
     },
     editRecipe() {
       this.$store.commit("SET_RECIPE", this.recipe);
-      this.$router.push({
-        name: "editRecipe",
-        params: { id: this.recipe.id, newOrExisting: this.newOrExisting },
-      });
+      if (this.$route.path.startsWith("/recipe-details")) {
+        this.$router.push({
+          name: "saveRecipe",
+          params: { id: this.recipe.id },
+        });
+      } else {
+        this.$router.push({
+          name: "editRecipe",
+          params: { id: this.recipe.id },
+        });
+      }
     },
     /* Back button goes to previous screen, except for the case
      where the user got to Recipe Details by cancelling Edit Recipe */
     goBack() {
-      if (this.$route.params.newOrExisting === "new") {
-        this.$router.push({name: "searchRecipes"});
+      if (this.$route.path.startsWith("/recipe-details")) {
+        this.$router.push({ name: "searchRecipes" });
+      } else if (this.$store.state.prevRoute.startsWith("/meal-plan-details")) {
+        this.$router.push(this.$store.state.prevRoute);
       } else {
-        this.$router.push({name: "myRecipes"});
+        this.$router.push({ name: "myRecipes" });
       }
     },
   },
   created() {
     this.$store.commit("SET_IS_LOADING", true);
-    if (this.$route.params.newOrExisting === "new") {
-      this.newOrExisting = "new";
+    if (this.$route.path.startsWith("/recipe-details")) {
       spoonacularService
         .getRecipeDetails(this.$route.params.id)
         .then((response) => {
@@ -125,7 +122,6 @@ export default {
             /<\/?[^>]+>/gi,
             ""
           );
-          this.$store.commit("SET_IS_LOADING", false);
         })
         .catch((error) => {
           if (error.response && error.response.status === 500) {
@@ -135,16 +131,16 @@ export default {
             alert("Error retrieving recipe details.");
             console.log("Problem retrieving recipe details: " + error);
           }
+        })
+        .finally(() => {
           this.$store.commit("SET_IS_LOADING", false);
         });
-    } else if (this.$route.params.newOrExisting === "existing") {
-      this.newOrExisting = "existing";
+    } else {
       recipeService
         .getRecipe(this.$route.params.id)
         .then((response) => {
           this.recipe = response.data;
           this.recipe.id = this.$route.params.id;
-          this.$store.commit("SET_IS_LOADING", false);
         })
         .catch((error) => {
           if (error.response && error.response.status === 404) {
@@ -154,37 +150,62 @@ export default {
             alert("Problem retrieving recipe details.");
             console.log("Problem retrieving recipe details: " + error);
           }
+        })
+        .finally(() => {
           this.$store.commit("SET_IS_LOADING", false);
         });
-    } else {
-      this.$store.commit("SET_IS_LOADING", false);
-      alert("Invalid Address.");
-      this.$router.push("/");
     }
   },
 };
 </script>
 
 <style>
-.my-recipe-details {
+#recipe-details-div {
   background: #94c973;
-  margin: 4em auto;
-  width: 65%;
+  margin: 2em auto;
+  width: 65vw;
   text-align: center;
   border-radius: 25px;
+  padding-bottom: 25px;
+  color: #1a4314;
+  font-size: 16pt;
 }
 
-#recipe-header {
-  font-size: 2em;
-  text-align: center;
+@media only screen and (max-width: 1024px) {
+  #recipe-details-div {
+    width: 90vw;
+  }
 }
 
-.edit-recipe-btn {
-  background-color: #1a4314;
+@media only screen and (max-width: 340px) {
+  #recipe-details-div {
+    width: 100vw;
+  }
+}
+
+#recipe-ingredients-table {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 5px;
+  border-style: dotted;
+}
+tr {
+  text-align: left;
+}
+
+#servings-div {
+  margin-bottom: 15px;
+}
+
+#directions-div {
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
   margin-bottom: 30px;
-}
-
-th {
+  word-wrap: break-word;
+  border: 5px;
+  border-style: dotted;
   border-radius: 25px;
+  padding: 15px;
 }
 </style>

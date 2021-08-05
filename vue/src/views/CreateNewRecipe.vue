@@ -1,13 +1,14 @@
 <template>
   <div>
-    <create-recipe-form />
+    <h1>Add Custom Recipe</h1>
+    <recipe-form />
   </div>
 </template>
 
 <script>
-import CreateRecipeForm from "../components/CreateRecipeForm.vue";
+import RecipeForm from "../components/RecipeForm.vue";
 export default {
-  components: { CreateRecipeForm },
+  components: { RecipeForm },
 };
 </script>
 

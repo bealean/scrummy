@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    
     <loading-overlay v-if="$store.state.isLoading" />
     <div id="loaded-div">
       <top-navigation />
@@ -18,7 +17,7 @@ export default {
   components: { LoadingOverlay, TopNavigation, TheFooter },
   mounted() {
     document.onreadystatechange = () => {
-      if (document.readyState == "complete") {
+      if (document.readyState === "complete") {
         this.$store.commit("SET_IS_LOADING", false);
       }
     };
@@ -41,7 +40,8 @@ html {
 #loaded-div {
   min-height: 98vh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
 button {
@@ -53,15 +53,21 @@ button {
   box-sizing: border-box;
   text-decoration: none;
   font-family: monospace;
-  font-size: 1rem;
+  font-size: 18px;
   font-weight:600;
   color: #264653;
   background-color: #94c973;
   text-align: center;
   transition: all 0.2s;
-  width: 15rem;
-  height: 2.5rem;
+  width: 300px;
+  height: 50px;
   cursor: pointer;
+}
+
+.large-button {
+  width: 325px;
+  height: 55px;
+  font-size: 22px;
 }
 
 .dark-green-btns {
@@ -82,6 +88,24 @@ h1 {
   border-radius: 25px;
   width: 60%;
   display: inline-block;
+  padding: 10px;
+}
+
+h2 {
+  background-color: rgba(255, 253, 253, 0.5);
+  color: #264653;
+  min-width: fit-content;
+  width: 40%;
+  border-radius: 25px;
+  display: inline-block;
+  font-size: 26px;
+  margin-bottom: 0px;
+  margin-top: 15px;
+  padding: 0px 10px 0px 10px;
+}
+
+.transparent-background-on-image {
+  background-color: rgba(255, 253, 253, 0.75);
 }
 
 .link {
@@ -90,7 +114,7 @@ h1 {
 }
 
 .link:hover {
-  color: #226c8a;
+  color: #e95c39;
 }
 
 table {
@@ -117,7 +141,9 @@ table {
 }
 
 .table-numbered-rows th {
-  padding: 5px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 25px;
+  text-align: center;
 }
 
 .row-number-cell {
@@ -131,6 +157,7 @@ table {
   padding-left: 20px;
   padding-right: 20px;
   text-align: left;
+  text-decoration: underline;
 }
 
 th {
@@ -147,7 +174,7 @@ label {
   background-color: rgba(255, 253, 253, 0.5);
   border-radius: 25px;
   text-align: center;
-  padding: 2px;
+  padding: 5px;
 }
 
 .login-register-input-label {
@@ -164,6 +191,11 @@ form {
   text-align: center;
   padding: 15px;
   border-radius: 25px;
+}
+
+textarea {
+  width: 90%;
+  max-width: 500px;
 }
 
 input[type="password"],

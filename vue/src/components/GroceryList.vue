@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>Grocery List</h1>
-
     <div id="save-ingredient-div">
       <form
         id="add-new-ingredient-to-grocery-list"

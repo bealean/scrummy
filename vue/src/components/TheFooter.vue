@@ -1,5 +1,7 @@
 <template>
-  <footer>Creating scrumptious meal plans since 2021.</footer>
+  <footer class="transparent-background-on-image">
+    Creating scrumptious meal plans since 2021.
+  </footer>
 </template>
 
 <script>
@@ -8,7 +10,6 @@ export default {};
 
 <style>
 footer {
-  background-color: rgba(255, 253, 253, 0.85);
   border-radius: 25px;
   width: 40%;
   min-width: fit-content;
@@ -16,6 +17,8 @@ footer {
   margin-right: auto;
   margin-top: 30px;
   margin-bottom: 15px;
-  font-size: 14pt;
+  padding: 0px 10px 0px 10px;
+  font-size: 20px;
+  color: #264653;
 }
 </style>

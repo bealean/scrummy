@@ -7,7 +7,9 @@ import Register from '../views/Register.vue'
 import store from '../store/index'
 import SearchRecipes from '../views/SearchRecipes.vue'
 import RecipeDetails from '../views/RecipeDetails.vue'
+import MyRecipeDetails from '../views/MyRecipeDetails.vue'
 import EditRecipe from '../views/EditRecipe.vue'
+import SaveRecipe from '../views/SaveRecipe.vue'
 import MyRecipes from '../views/MyRecipes.vue'
 import CreateNewRecipe from '../views/CreateNewRecipe.vue'
 import MyMealPlans from '../views/MyMealPlans.vue'
@@ -73,7 +75,7 @@ const router = new Router({
       }
     },
     {
-      path: "/recipe-details/:id/:newOrExisting",
+      path: "/recipe-details/:id",
       name: "recipeDetails",
       component: RecipeDetails,
       meta: {
@@ -81,9 +83,25 @@ const router = new Router({
       }
     },
     {
-      path: "/edit-recipe/:id/:newOrExisting",
+      path: "/my-recipe-details/:id",
+      name: "myRecipeDetails",
+      component: MyRecipeDetails,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/edit-recipe/:id",
       name: "editRecipe",
       component: EditRecipe,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: "/save-recipe/:id",
+      name: "saveRecipe",
+      component: SaveRecipe,
       meta: {
         requiresAuth: true,
       }

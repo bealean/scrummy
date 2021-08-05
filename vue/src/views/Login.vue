@@ -1,7 +1,7 @@
 <template>
   <div id="login" class="text-center">
     <form class="form-signin" @submit.prevent="login">
-      <h1 class="h3 mb-3 font-weight-normal">Scrummy Meal Planner</h1>
+      <h1>Scrummy Meal Planner</h1>
       <div
         id="sign-in-message"
         class="user-message"
@@ -102,7 +102,6 @@ export default {
 <style scoped>
 h1 {
   padding: 15px;
-  font-size: 24pt;
 }
 
 button {

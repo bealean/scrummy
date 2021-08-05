@@ -62,16 +62,16 @@ export default {
 
 <style scoped>
 .meal-plan-btns {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .new-meal-title {
-  margin-bottom: 1.5rem;
+  margin-bottom: 30px;
 }
 
 .meal-plan-form {
-  padding: 2rem;
+  padding: 40px;
   width: fit-content;
 }
 </style>
