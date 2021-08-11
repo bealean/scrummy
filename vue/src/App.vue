@@ -27,13 +27,17 @@ export default {
 
 <style>
 html {
-  background: url("./assets/pexels-ready-made-smaller.jpg") center;
+  background: url("./assets/pexels-ready-made-smaller.jpg") no-repeat center center fixed;
   /* https://images.pexels.com/photos/3850888/pexels-photo-3850888.jpeg?cs=srgb&dl=pexels-ready-made-3850888.jpg&fm=jpg */
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
   background-color: rgba(255, 253, 253, 0.85);
   font-family: monospace;
   font-size: 14pt;
   text-align: center;
+  width: 100%;
   height: 100%;
 }
 
@@ -72,6 +76,7 @@ button {
 
 .dark-green-btns {
   background-color: #1a4314;
+  border-color: #1a4314;
   color: #ffffff;
   font-weight:300;
 }
