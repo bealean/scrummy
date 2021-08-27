@@ -50,11 +50,9 @@ html {
 
 button {
   display: inline-block;
-  padding: 0.3em 1.2em;
-  margin: 0 0.3em 0.3em 0;
+  margin: 0 10px 10px 0;
   border-color:#264653;
-  border-radius: 2em;
-  box-sizing: border-box;
+  border-radius: 25px;
   text-decoration: none;
   font-family: monospace;
   font-size: 18px;
@@ -62,7 +60,7 @@ button {
   color: #264653;
   background-color: #94c973;
   text-align: center;
-  transition: all 0.2s;
+  transition: all .5s;
   width: 300px;
   height: 50px;
   cursor: pointer;
@@ -92,6 +90,7 @@ h1 {
   font-size: 36pt;
   border-radius: 25px;
   width: 60%;
+  min-width: fit-content;
   display: inline-block;
   padding: 10px;
 }
@@ -125,10 +124,8 @@ h2 {
 table {
   background-color: #94c973;
   border-radius: 25px;
-  margin: 15px 0px 0px 0px;
+  margin: 15px auto 0px auto;
   padding: 15px;
-  margin-left: auto;
-  margin-right: auto;
   font-size: 16pt;
 }
 
@@ -190,8 +187,9 @@ label {
 
 form {
   background: #94c973;
-  margin: 2em auto;
+  margin: 37px auto;
   width: 90%;
+  min-width:fit-content;
   max-width: 1080px;
   text-align: center;
   padding: 15px;
