@@ -166,7 +166,7 @@ export default {
             }
           })
           .catch((error) => {
-            if (error.response.status === 401) {
+            if (error.response && error.response.status === 401) {
               alert("Session expired. Please sign in again.");
               this.$router.push("/login");
             } else {
@@ -221,8 +221,8 @@ export default {
         .getAllRecipes()
         .then(() => {})
         .catch((error) => {
-          if (error.response.status === 401) {
-            this.$store.commit("SET_IS_LOADING", false);
+          this.$store.commit("SET_IS_LOADING", false);
+          if (error.response && error.response.status === 401) {
             alert("Session Expired. Please sign in again.");
             this.$router.push("/login");
           }

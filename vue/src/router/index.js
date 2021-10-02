@@ -155,8 +155,8 @@ const router = new Router({
       }
     },
     {
-      path: "/grocery-list/:mealPlanId",
-      name: "groceries",
+      path: "/grocery-list",
+      name: "groceriesForPlans",
       component: Groceries,
       meta: {
         requiresAuth: true,
@@ -164,7 +164,7 @@ const router = new Router({
     },
 
   ],
-  scrollBehavior () {
+  scrollBehavior() {
     return { x: 0, y: 0 }
   }
 })
@@ -172,7 +172,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
 
   store.commit("SET_PREV_ROUTE", from.path);
-  
+
   // Determine if the route requires Authentication
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
 

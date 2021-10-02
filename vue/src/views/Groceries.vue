@@ -104,11 +104,31 @@ export default {
     },
   },
   created() {
-    mealPlanService
-      .getIngredientsByMealPlanId(this.$route.params.mealPlanId)
-      .then((ingredient) => {
-        this.groceryItems = ingredient.data;
-      });
+    this.$store.commit("SET_IS_LOADING", true);
+    let mealPlanIdArray = this.$route.query.id;
+    let queryString = "";
+    for (let i = 0; i < mealPlanIdArray.length; i++) {
+      if (i === mealPlanIdArray.length - 1) {
+        queryString += "id=" + mealPlanIdArray[i];
+      } else {
+        queryString += "id=" + mealPlanIdArray[i] + "&";
+      }
+    }
+
+    if (queryString.length > 0) {
+      mealPlanService
+        .getIngredientsByMealPlanIds(queryString)
+        .then((ingredient) => {
+          this.groceryItems = ingredient.data;
+        })
+        .catch((error) => {
+          alert("Problem retrieving Grocery List.");
+          console.log("Problem retrieving Grocery List: " + error);
+        })
+        .finally(() => {
+          this.$store.commit("SET_IS_LOADING", false);
+        });
+    }
   },
 };
 </script>

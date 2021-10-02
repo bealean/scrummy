@@ -36,7 +36,7 @@ export default {
   created() {
       recipeService.getAllRecipes().then(() => {
     }).catch((error) => {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         this.$store.commit("SET_AUTH_TOKEN", "");
         this.$router.push("/login");
       } 

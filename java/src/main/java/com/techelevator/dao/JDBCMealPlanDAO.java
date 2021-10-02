@@ -4,9 +4,12 @@ import com.techelevator.exceptions.MealPlanNotFoundException;
 import com.techelevator.exceptions.RecipeNotFoundException;
 import com.techelevator.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class JDBCMealPlanDAO implements MealPlanDAO {
     @Autowired
     DailyPlanDAO dailyPlanDAO;
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public JDBCMealPlanDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -53,7 +56,7 @@ public class JDBCMealPlanDAO implements MealPlanDAO {
     }
 
     @Override
-    public List<GroceryListItem> getIngredientsByMealPlanId(long mealPlanId) {
+    public List<GroceryListItem> getIngredientsByMealPlanIds(long[] mealPlanIds) {
         String sql = "SELECT DISTINCT i.name AS \"name\" " +
                 "FROM ingredients i " +
                 "JOIN recipe_ingredients ri ON i.ingredient_id = ri.ingredient_id " +
@@ -61,24 +64,39 @@ public class JDBCMealPlanDAO implements MealPlanDAO {
                 "JOIN meals_recipes mr ON r.recipe_id = mr.recipe_id " +
                 "JOIN meals m ON mr.meal_id = m.meal_id " +
                 "JOIN daily_plan d ON m.dp_id = d.dp_id " +
-                "WHERE d.meal_plan_id = ?";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, mealPlanId);
+                "WHERE d.meal_plan_id = ANY(?) " +
+                "ORDER BY name";
         List<GroceryListItem> ingredients = new ArrayList<>();
-        while (result.next()) {
-            String ingredient = result.getString("name");
-            GroceryListItem groceryListItem = new GroceryListItem(ingredient, false);
-            ingredients.add(groceryListItem);
+        try {
+            /* Casting the array as Object specifies that the array is a single argument.
+               If the cast is removed IntelliJ warns that the argument is confusing to
+               the varargs method. */
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, (Object) mealPlanIds);
+            while (result.next()) {
+                String ingredient = result.getString("name");
+                GroceryListItem groceryListItem = new GroceryListItem(ingredient, false);
+                ingredients.add(groceryListItem);
+            }
+        } catch (DataAccessException error) {
+            error.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Exception retrieving grocery list.");
         }
         return ingredients;
     }
 
     @Override
     public Long addMealPlan(String mealPlanName, long userId) {
-        String sql = "INSERT INTO meal_plan(user_id, mp_name) VALUES(?, ?)";
-        jdbcTemplate.update(sql, userId, mealPlanName);
-        String sqlSelect = "SELECT meal_plan_id FROM meal_plan WHERE user_id = ? AND mp_name = ?";
-        Long mealPlanId = jdbcTemplate.queryForObject(sqlSelect, Long.class, userId,
-                mealPlanName);
+        String sql = "INSERT INTO meal_plan(user_id, mp_name) VALUES(?, ?) RETURNING meal_plan_id";
+        Long mealPlanId;
+        try {
+            mealPlanId = jdbcTemplate.queryForObject(sql, Long.class, userId, mealPlanName);
+        } catch (DataAccessException error) {
+            error.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Exception adding meal plan.");
+        }
+
         String[] weekdays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         String[] mealTypes = {"Breakfast", "Snack", "Lunch", "Snack", "Dinner", "Dessert"};
         List<Meal> meals = new ArrayList<>();
@@ -88,8 +106,10 @@ public class JDBCMealPlanDAO implements MealPlanDAO {
             meals.add(meal);
         }
         for (String weekday : weekdays) {
-            DailyPlan dailyPlan = new DailyPlan(0, weekday, meals, mealPlanId);
-            dailyPlanDAO.addDailyPlanToMealPlan(dailyPlan);
+            if (mealPlanId != null) {
+                DailyPlan dailyPlan = new DailyPlan(0, weekday, meals, mealPlanId);
+                dailyPlanDAO.addDailyPlanToMealPlan(dailyPlan);
+            }
         }
         return mealPlanId;
     }

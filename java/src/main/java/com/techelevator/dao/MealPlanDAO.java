@@ -15,7 +15,7 @@ public interface MealPlanDAO {
 
     MealPlan getMealPlanById(long mealPlanId) throws RecipeNotFoundException, MealPlanNotFoundException;
 
-    List<GroceryListItem> getIngredientsByMealPlanId(long mealPlanId);
+    List<GroceryListItem> getIngredientsByMealPlanIds(long[] mealPlanIds);
 
     Long addMealPlan(String mealPlanName, long userId);
 

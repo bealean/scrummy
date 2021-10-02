@@ -5,7 +5,8 @@ import com.techelevator.dao.MealPlanDAO;
 import com.techelevator.dao.UserDAO;
 import com.techelevator.exceptions.MealPlanNotFoundException;
 import com.techelevator.exceptions.RecipeNotFoundException;
-import com.techelevator.model.*;
+import com.techelevator.model.GroceryListItem;
+import com.techelevator.model.MealPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.techelevator.controller.RecipeController.logTimestamp;
@@ -52,10 +52,10 @@ public class MealPlanController {
         return mealPlanDAO.getMealPlanById(mealPlanId);
     }
 
-    @RequestMapping(path = "/grocery-list/{mealPlanId}", method = RequestMethod.GET)
-    public List<GroceryListItem> getIngredientsByMealPlanId(@PathVariable long mealPlanId) {
+    @RequestMapping(path = "/grocery-list", method = RequestMethod.GET)
+    public List<GroceryListItem> getIngredientsByMealPlanIds(@RequestParam long[] id) {
         logTimestamp("Retrieving grocery list");
-        return mealPlanDAO.getIngredientsByMealPlanId(mealPlanId);
+        return mealPlanDAO.getIngredientsByMealPlanIds(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
